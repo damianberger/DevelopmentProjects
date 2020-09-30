@@ -10,4 +10,5 @@ public interface UserService {
     void saveUser (User user);
     void editUser (User user);
     List<User> FindAll();
+    User readUser(long id);
 }
