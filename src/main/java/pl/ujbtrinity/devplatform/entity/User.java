@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import pl.ujbtrinity.devplatform.model.Status;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,11 +37,11 @@ public class User {
 
     @CreatedDate
     @Column(name = "created")
-    private Date created;
+    private LocalDate created;
 
     @LastModifiedDate
     @Column(name = "updated")
-    private Date updated;
+    private LocalDate updated;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
