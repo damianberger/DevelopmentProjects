@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.ujbtrinity.devplatform.entity.User;
-import pl.ujbtrinity.devplatform.service.CurrentUser;
+import pl.ujbtrinity.devplatform.model.CurrentUser;
 import pl.ujbtrinity.devplatform.service.UserService;
 
 import java.util.HashSet;

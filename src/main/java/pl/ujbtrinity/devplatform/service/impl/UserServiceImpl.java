@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.entity.Role;
 import pl.ujbtrinity.devplatform.entity.User;
+import pl.ujbtrinity.devplatform.model.Status;
 import pl.ujbtrinity.devplatform.repository.RoleRepository;
 import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.UserService;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
+        user.setStatus(Status.ACTIVE);
         Role userRole = roleRepository.findByName("ROLE_USER");
         user.setRoles(new HashSet<Role> (Arrays.asList(userRole)));
         userRepository.save(user);
