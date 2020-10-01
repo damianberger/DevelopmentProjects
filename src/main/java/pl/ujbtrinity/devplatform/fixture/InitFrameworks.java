@@ -10,7 +10,10 @@ public class InitFrameworks {
     public void init(String frameworkName) {
         Framework framework = new Framework();
         framework.setName(frameworkName);
-        frameworkService.createFramework(framework);
+        boolean existFramework = frameworkService.existsByName(frameworkName);
+        if (!existFramework) {
+            frameworkService.createFramework(framework);
+        }
     }
 
     private final FrameworkServiceImpl frameworkService;

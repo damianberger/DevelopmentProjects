@@ -10,7 +10,10 @@ public class InitTechnologies {
     public void init(String technologyName) {
         Technology technology = new Technology();
         technology.setName(technologyName);
-        technologyService.createTechnology(technology);
+        boolean existTechnology = technologyService.existsByName(technologyName);
+        if (!existTechnology) {
+            technologyService.createTechnology(technology);
+        }
     }
 
     private final TechnologyServiceImpl technologyService;

@@ -9,4 +9,5 @@ public interface TechnologyService {
     void updateTechnology (Technology technology);
     List<Technology> FindAll();
     Technology readTechnology(long id);
+    boolean existsByName(String name);
 }

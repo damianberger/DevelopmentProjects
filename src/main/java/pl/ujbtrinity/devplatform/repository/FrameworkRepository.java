@@ -6,4 +6,6 @@ import pl.ujbtrinity.devplatform.entity.Framework;
 
 @Repository
 public interface FrameworkRepository extends JpaRepository<Framework, Long> {
+
+    boolean existsFrameworkByName(String name);
 }

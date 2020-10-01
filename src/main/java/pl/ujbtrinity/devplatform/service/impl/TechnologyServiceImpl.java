@@ -37,4 +37,9 @@ public class TechnologyServiceImpl implements TechnologyService {
     public Technology readTechnology(long id) {
         return technologyRepository.getOne(id);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return technologyRepository.existsTechnologyByName(name);
+    }
 }

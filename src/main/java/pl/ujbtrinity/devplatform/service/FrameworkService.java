@@ -9,4 +9,5 @@ public interface FrameworkService {
     void updateFramework (Framework framework);
     List<Framework> FindAll();
     Framework readFramework(long id);
+    boolean existsByName(String name);
 }
