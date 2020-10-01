@@ -37,4 +37,9 @@ public class FrameworkServiceImpl implements FrameworkService {
     public Framework readFramework(long id) {
         return FrameworkRepository.getOne(id);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return FrameworkRepository.existsFrameworkByName(name);
+    }
 }
