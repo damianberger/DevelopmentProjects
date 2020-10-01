@@ -32,4 +32,9 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> findAll() {
         return this.roleRepository.findAll();
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return roleRepository.existsRoleByName(name);
+    }
 }
