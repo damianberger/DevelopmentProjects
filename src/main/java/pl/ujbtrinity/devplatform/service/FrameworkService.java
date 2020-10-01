@@ -1,0 +1,12 @@
+package pl.ujbtrinity.devplatform.service;
+
+import pl.ujbtrinity.devplatform.entity.Framework;
+
+import java.util.List;
+
+public interface FrameworkService {
+    void createFramework (Framework framework);
+    void updateFramework (Framework framework);
+    List<Framework> FindAll();
+    Framework readFramework(long id);
+}
