@@ -11,4 +11,5 @@ public interface UserService {
     void editUser (User user);
     List<User> FindAll();
     User readUser(long id);
+    boolean existsByEmail(String email);
 }

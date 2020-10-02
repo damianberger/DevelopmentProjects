@@ -1,9 +1,7 @@
 package pl.ujbtrinity.devplatform.fixture;
 
 import org.springframework.stereotype.Service;
-import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Role;
-import pl.ujbtrinity.devplatform.service.impl.FrameworkServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.RoleServiceImpl;
 
 @Service
@@ -14,7 +12,6 @@ public class InitRoles {
     public InitRoles(RoleServiceImpl roleService) {
         this.roleService = roleService;
     }
-
 
     public void init(String rolesName) {
         Role role = new Role();
