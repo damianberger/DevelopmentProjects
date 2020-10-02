@@ -25,7 +25,7 @@ public class StartupDataInsert implements CommandLineRunner {
         initTechnologies.intiTechnologies();
         initFrameworks.initFrameworks();
         initRoles.initRoles();
-        initAdminAccount.init();
+        initAdminAccount.initAdmin();
 
     }
 }
