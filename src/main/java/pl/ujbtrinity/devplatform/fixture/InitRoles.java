@@ -26,7 +26,7 @@ public class InitRoles {
         init("ROLE_DEVELOPER");
         init("ROLE_CUSTOMER");
         init("ROLE_ADMIN");
-        init("ROLE_SUPERADMIN");
+        init("ROLE_SUPER_ADMIN");
     }
 }
 

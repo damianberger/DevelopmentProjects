@@ -11,9 +11,9 @@ public class StartupDataInsert implements CommandLineRunner {
     private final InitTechnologies initTechnologies;
     private final InitFrameworks initFrameworks;
     private final InitRoles initRoles;
-    private final InitAdminAccount initAdminAccount;
+    private final InitSuperAdminAccount initAdminAccount;
 
-    public StartupDataInsert(InitTechnologies initTechnologies, InitFrameworks initFrameworks, InitRoles initRoles, InitAdminAccount initAdminAccount) {
+    public StartupDataInsert(InitTechnologies initTechnologies, InitFrameworks initFrameworks, InitRoles initRoles, InitSuperAdminAccount initAdminAccount) {
         this.initTechnologies = initTechnologies;
         this.initFrameworks = initFrameworks;
         this.initRoles = initRoles;
@@ -25,7 +25,7 @@ public class StartupDataInsert implements CommandLineRunner {
         initTechnologies.intiTechnologies();
         initFrameworks.initFrameworks();
         initRoles.initRoles();
-        initAdminAccount.initAdmin();
+        initAdminAccount.initSuperAdmin();
 
     }
 }
