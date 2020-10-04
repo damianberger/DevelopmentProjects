@@ -8,4 +8,5 @@ public interface RoleService {
     void save(Role role);
     Role findOneByName(String roleName);
     List<Role> findAll();
+    boolean existsByName(String name);
 }
