@@ -1,19 +1,13 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Ronin
-  Date: 04.10.2020
-  Time: 14:24
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-    <title>Title</title>
+    <title>Index</title>
 </head>
 <body>
-<a href="/tech">techy</a>
-<a href="/frame">framy</a>
-<a href="/user">usery</a>
-<a href="/role">role</a>
+<a href="/api/v1/test/tech">techs</a>
+<a href="/api/v1/test/frame">frames</a>
+<a href="/api/v1/test/user">users</a>
+<a href="/api/v1/test/role">roles</a>
 </body>
 </html>

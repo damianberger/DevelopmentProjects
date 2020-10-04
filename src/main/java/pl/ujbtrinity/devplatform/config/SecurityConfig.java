@@ -1,4 +1,4 @@
-package pl.ujbtrinity.devplatform.security;
+package pl.ujbtrinity.devplatform.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
