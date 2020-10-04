@@ -10,4 +10,9 @@ public class HomePageController {
     public String homePage() {
         return "index";
     }
+
+    @GetMapping("/api/v1/admin")
+    public String databaseTest() {
+        return "admin/databaseTest";
+    }
 }

@@ -15,7 +15,7 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/test/")
+@RequestMapping(value = "/api/v1/admin")
 public class DatabaseTestController {
 
     private final TechnologyServiceImpl technologyService;
@@ -45,7 +45,7 @@ public class DatabaseTestController {
         return userService.FindAll();
     }
 
-    @GetMapping("role")
+    @GetMapping("/role")
     List<Role> getR(){
         return roleService.findAll();
     }
