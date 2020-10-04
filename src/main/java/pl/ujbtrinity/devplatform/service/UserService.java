@@ -12,4 +12,5 @@ public interface UserService {
     List<User> FindAll();
     User readUser(long id);
     boolean existsByEmail(String email);
+    void createSuperAdmin(User user);
 }
