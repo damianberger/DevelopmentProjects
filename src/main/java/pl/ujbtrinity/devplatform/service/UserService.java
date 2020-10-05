@@ -9,7 +9,7 @@ public interface UserService {
     User findByUsername (String username);
     void saveUser (User user);
     void editUser (User user);
-    List<User> FindAll();
+    List<User> findAll();
     User readUser(long id);
     boolean existsByEmail(String email);
     void createSuperAdmin(User user);

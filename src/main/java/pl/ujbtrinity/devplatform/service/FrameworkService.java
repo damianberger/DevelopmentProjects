@@ -7,7 +7,7 @@ import java.util.List;
 public interface FrameworkService {
     void createFramework (Framework framework);
     void updateFramework (Framework framework);
-    List<Framework> FindAll();
+    List<Framework> findAll();
     Framework readFramework(long id);
     boolean existsByName(String name);
 }
