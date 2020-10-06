@@ -60,7 +60,13 @@ public class User {
     private Set<Technology> technologies;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_frameworkss", joinColumns = @JoinColumn(name = "user_id"),
+    @JoinTable(name = "user_frameworks", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "framework_id"))
     private Set<Framework> frameworks;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_projects", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private Set<Project> projects;
+
 }
