@@ -22,4 +22,7 @@ public class Framework {
 
     @ManyToMany(mappedBy = "frameworks")
     private Set<User> users;
+
+    @ManyToMany(mappedBy = "frameworksUsed")
+    private Set<Project> projects;
 }

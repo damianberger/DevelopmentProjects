@@ -23,4 +23,8 @@ public class Technology {
 
     @ManyToMany(mappedBy = "technologies")
     private Set<User> users;
+
+    @ManyToMany(mappedBy = "technologiesUsed")
+    private Set<Project> projects;
+
 }

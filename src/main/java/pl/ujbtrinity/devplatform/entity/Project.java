@@ -19,11 +19,22 @@ public class Project {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @ManyToMany(mappedBy = "projects")
-    private Set<Technology> technologiesUsed;
-    @ManyToMany(mappedBy = "projects")
-    private Set<Framework> frameworksUsed;
+
     @ManyToMany(mappedBy = "projects")
     private Set<User> users;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "projects_technologies", joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "technology_id"))
+    private Set<Technology> technologiesUsed;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "projects_frameworks", joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "framework_id"))
+    private Set<Framework> frameworksUsed;
+
+
+
+
 
 }
