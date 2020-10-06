@@ -30,17 +30,17 @@ public class Test {
 
     @GetMapping("/tech")
     List<Technology> getT(){
-        return technologyService.FindAll();
+        return technologyService.findAll();
     }
 
     @GetMapping("/frame")
     List<Framework> getF(){
-        return frameworkService.FindAll();
+        return frameworkService.findAll();
     }
 
     @GetMapping("/user")
     List<User> getU(){
-        return userService.FindAll();
+        return userService.findAll();
     }
 
     @GetMapping("/role")

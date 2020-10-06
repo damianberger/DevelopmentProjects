@@ -29,7 +29,7 @@ public class FrameworkServiceImpl implements FrameworkService {
     }
 
     @Override
-    public List<Framework> FindAll() {
+    public List<Framework> findAll() {
         return FrameworkRepository.findAll();
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
 public interface TechnologyService {
     void createTechnology (Technology technology);
     void updateTechnology (Technology technology);
-    List<Technology> FindAll();
+    List<Technology> findAll();
     Technology readTechnology(long id);
     boolean existsByName(String name);
 }

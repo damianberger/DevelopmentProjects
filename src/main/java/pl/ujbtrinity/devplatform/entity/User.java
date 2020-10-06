@@ -10,7 +10,6 @@ import pl.ujbtrinity.devplatform.model.Status;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "\"user\"")
