@@ -1,13 +1,15 @@
 package pl.ujbtrinity.devplatform.service;
 
 
+import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.User;
 
 import java.util.List;
 
 public interface UserService {
     User findByUsername (String username);
-    void saveUser (User user);
+    void registerCustomer (UserRegistrationDto userRegistrationDto);
+    void registerDeveloper (UserRegistrationDto userRegistrationDto);
     void editUser (User user);
     List<User> findAll();
     User readUser(long id);
