@@ -23,7 +23,7 @@ public class RegistrationController {
 
     @PostMapping("/developer/registration")
     public String developerRegistration(@RequestBody UserRegistrationDto userRegistrationDto) {
-        this.userService.registerCustomer(userRegistrationDto);
+        this.userService.registerDeveloper(userRegistrationDto);
         return "Ok";
     }
 }
