@@ -2,6 +2,7 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.Role;
 import pl.ujbtrinity.devplatform.entity.User;
 import pl.ujbtrinity.devplatform.model.Status;
@@ -33,10 +34,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public void registerCustomer(UserRegistrationDto userRegistrationDto) {
+        User user = userRegistrationDto.toUser();
+        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        user.setCreated(LocalDate.now());
+        user.setUpdated(LocalDate.now());
         user.setStatus(Status.ACTIVE);
-        Role userRole = roleRepository.findByName("ROLE_USER");
+        Role userRole = roleRepository.findByName("ROLE_CUSTOMER");
+        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void registerDeveloper(UserRegistrationDto userRegistrationDto) {
+        User user = userRegistrationDto.toUser();
+        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        user.setCreated(LocalDate.now());
+        user.setUpdated(LocalDate.now());
+        user.setStatus(Status.ACTIVE);
+        Role userRole = roleRepository.findByName("ROLE_DEVELOPER");
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         userRepository.save(user);
     }
