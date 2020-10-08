@@ -1,6 +1,7 @@
 package pl.ujbtrinity.devplatform.service;
 
 
+import pl.ujbtrinity.devplatform.dto.UserDto;
 import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.User;
 
@@ -15,4 +16,5 @@ public interface UserService {
     User readUser(long id);
     boolean existsByEmail(String email);
     void createSuperAdmin(User user);
+    UserDto convertToDto(User user);
 }
