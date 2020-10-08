@@ -15,6 +15,9 @@ public class RegistrationController {
         this.userService = userService;
     }
 
+    /**
+     * do usunięcia
+
     @PostMapping("/customer/registration")
     public String customerRegistration(@RequestBody UserRegistrationDto userRegistrationDto) {
         this.userService.registerCustomer(userRegistrationDto);
@@ -25,5 +28,17 @@ public class RegistrationController {
     public String developerRegistration(@RequestBody UserRegistrationDto userRegistrationDto) {
         this.userService.registerDeveloper(userRegistrationDto);
         return "Ok";
+    }
+
+     */
+
+    @PostMapping("/register")
+    public String registration(@RequestBody UserRegistrationDto userRegistrationDto) {
+        /**
+         * body
+         * In my opinion, roles should be assigned here
+         * Remember to change antMatchers in securityConfig
+         */
+        return "ok";
     }
 }
