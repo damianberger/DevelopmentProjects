@@ -2,6 +2,7 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.ujbtrinity.devplatform.dto.UserProfileDto;
 import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.Role;
 import pl.ujbtrinity.devplatform.entity.User;
@@ -31,6 +32,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserProfileDto getUserCredentials(String username) {
+       UserProfileDto userCredentials = UserProfileDto.fromUser(findByUsername(username));
+       return userCredentials;
     }
 
     @Override

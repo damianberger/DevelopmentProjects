@@ -1,12 +1,24 @@
 package pl.ujbtrinity.devplatform.Controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.ujbtrinity.devplatform.dto.UserProfileDto;
+import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
+
+import java.security.Principal;
 
 @RestController
 public class UserProfileController {
+
+    private final UserServiceImpl userService;
+
+    public UserProfileController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     /**
      * Inject services
@@ -16,17 +28,21 @@ public class UserProfileController {
      * endpoints that should be here
      */
 
-    @GetMapping("user/read/{id}")
-    public String readProfile(@PathVariable String id) {
-        // Here the user should see a summary of their profile
-        return "user profile";
+    @GetMapping("/user/profile/")
+    public ResponseEntity<UserProfileDto> readProfile(Principal principal) {
+        UserProfileDto userCredentials = userService.getUserCredentials(principal.getName());
+        if(userCredentials == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userCredentials, HttpStatus.OK);
     }
 
-    @PostMapping("user/personals/{id}")
-    public String addPersonals(@PathVariable String id) {
-        // supplementing basic personal data
+    @PostMapping("user/personals/")
+    public String addPersonals(Principal principal) {
+
         return "user personals/next step";
     }
+
 
     @PostMapping("user/technologies/{id}")
     public String addTechnologiesUsedByCurrentUser(@PathVariable String id) {

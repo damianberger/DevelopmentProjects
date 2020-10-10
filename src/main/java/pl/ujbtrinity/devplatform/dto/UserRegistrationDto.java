@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import pl.ujbtrinity.devplatform.entity.User;
 
-
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRegistrationDto {
