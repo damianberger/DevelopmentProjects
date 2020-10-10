@@ -6,6 +6,7 @@ import pl.ujbtrinity.devplatform.entity.Technology;
 import pl.ujbtrinity.devplatform.entity.User;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -15,8 +16,8 @@ public class UserProfileDto {
     private String email;
     private String firstName;
     private String lastName;
-    private Set<Technology> technologies;
-    private Set<Framework> frameworks;
+    private Set<String> technologies;
+    private Set<String> frameworks;
 
     public static UserProfileDto fromUser(User user){
         UserProfileDto userProfileDto = new UserProfileDto();
@@ -24,9 +25,14 @@ public class UserProfileDto {
         userProfileDto.setFirstName(user.getFirstName());
         userProfileDto.setLastName(user.getLastName());
         userProfileDto.setUsername(user.getUsername());
-        userProfileDto.setTechnologies(user.getTechnologies());
-        userProfileDto.setFrameworks(user.getFrameworks());
+        userProfileDto.frameworks = user.getFrameworks()
+                .stream().map(Framework::getName)
+                .collect(Collectors.toSet());
+        userProfileDto.technologies = user.getTechnologies()
+                .stream().map(Technology::getName)
+                .collect(Collectors.toSet());
         return userProfileDto;
     }
+
 
 }

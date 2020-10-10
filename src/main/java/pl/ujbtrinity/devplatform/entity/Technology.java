@@ -27,4 +27,10 @@ public class Technology {
     @ManyToMany(mappedBy = "technologiesUsed")
     private Set<Project> projects;
 
+    @Override
+    public String toString() {
+        return "Technology{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }
