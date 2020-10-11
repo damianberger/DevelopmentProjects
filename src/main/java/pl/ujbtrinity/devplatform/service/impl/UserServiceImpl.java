@@ -42,28 +42,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerCustomer(UserRegistrationDto userRegistrationDto) {
-        User user = userRegistrationDto.toUser();
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        user.setCreated(LocalDate.now());
-        user.setUpdated(LocalDate.now());
-        user.setStatus(Status.ACTIVE);
-        Role userRole = roleRepository.findByName("ROLE_CUSTOMER");
-        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
-        userRepository.save(user);
+    public void register(UserRegistrationDto userRegistrationDto) {
+        if(userRegistrationDto.getPassword().matches(userRegistrationDto.getPasswordConfirmation())) {
+            User user = userRegistrationDto.toUser();
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+            user.setCreated(LocalDate.now());
+            user.setUpdated(LocalDate.now());
+            user.setStatus(Status.ACTIVE);
+            Role userRole;
+            if (userRegistrationDto.getRole().equals("Developer")) {
+                userRole = roleRepository.findByName("ROLE_DEVELOPER");
+            } else {
+                userRole = roleRepository.findByName("ROLE_CUSTOMER");
+            }
+            user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+            userRepository.save(user);
+        }
     }
 
-    @Override
-    public void registerDeveloper(UserRegistrationDto userRegistrationDto) {
-        User user = userRegistrationDto.toUser();
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        user.setCreated(LocalDate.now());
-        user.setUpdated(LocalDate.now());
-        user.setStatus(Status.ACTIVE);
-        Role userRole = roleRepository.findByName("ROLE_DEVELOPER");
-        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
-        userRepository.save(user);
-    }
 
     @Override
     public void createSuperAdmin(User user) {

@@ -9,36 +9,17 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 @RestController
 public class RegistrationController {
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
     public RegistrationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    /**
-     * do usunięcia
-
-    @PostMapping("/customer/registration")
-    public String customerRegistration(@RequestBody UserRegistrationDto userRegistrationDto) {
-        this.userService.registerCustomer(userRegistrationDto);
-        return "Ok";
-    }
-
-    @PostMapping("/developer/registration")
-    public String developerRegistration(@RequestBody UserRegistrationDto userRegistrationDto) {
-        this.userService.registerDeveloper(userRegistrationDto);
-        return "Ok";
-    }
-
-     */
 
     @PostMapping("/register")
     public String registration(@RequestBody UserRegistrationDto userRegistrationDto) {
-        /**
-         * body
-         * In my opinion, roles should be assigned here
-         * Remember to change antMatchers in securityConfig
-         */
-        return "ok";
+        this.userService.register(userRegistrationDto);
+
+        return "user registered";
     }
 }

@@ -12,8 +12,7 @@ import java.util.List;
 public interface UserService {
     User findByUsername (String username);
     UserProfileDto getUserProfile(String username);
-    void registerCustomer (UserRegistrationDto userRegistrationDto);
-    void registerDeveloper (UserRegistrationDto userRegistrationDto);
+    void register (UserRegistrationDto userRegistrationDto);
     void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     List<User> findAll();

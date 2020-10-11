@@ -14,6 +14,7 @@ public class UserRegistrationDto {
     private String lastName;
     private String password;
     private String passwordConfirmation;
+    private String role;
 
     public User toUser(){
     User user = new User();
