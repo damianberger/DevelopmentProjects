@@ -2,14 +2,15 @@ package pl.ujbtrinity.devplatform.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserProfileDto;
+import pl.ujbtrinity.devplatform.dto.UserProfileEditDto;
+import pl.ujbtrinity.devplatform.entity.User;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.security.Principal;
+import java.time.LocalDate;
 
 @RestController
 public class UserProfileController {
@@ -20,27 +21,30 @@ public class UserProfileController {
         this.userService = userService;
     }
 
-    /**
-     * Inject services
-     */
+    private static final String USER_PROFILE_ENDPOINT = "/user/profile";
+    private static final String USER_PROFILE_EDIT_ENDPOINT = "/user/profile/personals/edit";
+    private static final String USER_PASSWORD_EDIT_ENDPOINT = "/user/profile/password/edit";
 
-    /**
-     * endpoints that should be here
-     */
 
-    @GetMapping("/user/profile/")
+    @GetMapping(USER_PROFILE_ENDPOINT)
     public ResponseEntity<UserProfileDto> readProfile(Principal principal) {
-        UserProfileDto userCredentials = userService.getUserCredentials(principal.getName());
-        if(userCredentials == null){
+        UserProfileDto userProfile = userService.getUserProfile(principal.getName());
+        if (userProfile == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(userCredentials, HttpStatus.OK);
+        return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
-    @PostMapping("user/personals/")
-    public String addPersonals(Principal principal) {
+    @PostMapping(USER_PROFILE_EDIT_ENDPOINT)
+    public String editPersonals(Principal principal, @RequestBody UserProfileEditDto userProfileEditDto) {
+        userService.editUserPersonals(userProfileEditDto, principal.getName());
+        return "User data changed";
+    }
 
-        return "user personals/next step";
+    @PostMapping(USER_PASSWORD_EDIT_ENDPOINT)
+    public String editPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
+        userService.editUserPassword(passwordChangeDto,principal.getName());
+        return "Password changed";
     }
 
 

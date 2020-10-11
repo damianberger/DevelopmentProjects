@@ -2,7 +2,9 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserProfileDto;
+import pl.ujbtrinity.devplatform.dto.UserProfileEditDto;
 import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.Role;
 import pl.ujbtrinity.devplatform.entity.User;
@@ -35,9 +37,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileDto getUserCredentials(String username) {
-       UserProfileDto userCredentials = UserProfileDto.fromUser(findByUsername(username));
-       return userCredentials;
+    public UserProfileDto getUserProfile(String username) {
+        UserProfileDto userProfile = UserProfileDto.fromUser(findByUsername(username));
+        return userProfile;
     }
 
     @Override
@@ -74,17 +76,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(User user) {
-        User userFromDB = userRepository.getOne(user.getId());
-        userFromDB.setUsername(user.getUsername());
-        userFromDB.setFirstName(user.getFirstName());
-        userFromDB.setLastName(user.getLastName());
-        userFromDB.setPassword(passwordEncoder.encode(user.getPassword()));
-        userFromDB.setCreated(user.getCreated());
-        userFromDB.setUpdated(LocalDate.now());
-        userFromDB.setStatus(user.getStatus());
-        userFromDB.setRoles(user.getRoles());
+    public void editUserPersonals(UserProfileEditDto userProfileEditDto, String username) {
+        User user = userRepository.findByUsername(username);
+        user.setUsername(userProfileEditDto.getUsername());
+        user.setFirstName(userProfileEditDto.getFirstName());
+        user.setEmail(userProfileEditDto.getEmail());
+        user.setLastName(userProfileEditDto.getLastName());
+        user.setUpdated(LocalDate.now());
         userRepository.save(user);
+    }
+
+    @Override
+    public void editUserPassword(PasswordChangeDto passwordChangeDto, String username) {
+        User user = userRepository.findByUsername(username);
+        if (passwordEncoder.encode(passwordChangeDto.getCurrentPassword()).equals(user.getPassword())) {
+            if (passwordChangeDto.getNewPassword().equals(passwordChangeDto.getNewPasswordConfirm())) {
+                user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+            }
+        }
     }
 
     @Override

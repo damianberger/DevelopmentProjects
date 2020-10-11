@@ -1,5 +1,6 @@
 package pl.ujbtrinity.devplatform.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,10 +28,5 @@ public class Technology {
     @ManyToMany(mappedBy = "technologiesUsed")
     private Set<Project> projects;
 
-    @Override
-    public String toString() {
-        return "Technology{" +
-                "name='" + name + '\'' +
-                '}';
-    }
+
 }

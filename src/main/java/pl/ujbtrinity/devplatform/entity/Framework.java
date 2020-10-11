@@ -26,10 +26,4 @@ public class Framework {
     @ManyToMany(mappedBy = "frameworksUsed")
     private Set<Project> projects;
 
-    @Override
-    public String toString() {
-        return "Framework{" +
-                "name='" + name + '\'' +
-                '}';
-    }
 }
