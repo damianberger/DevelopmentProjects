@@ -5,12 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserProfileDto;
-import pl.ujbtrinity.devplatform.dto.UserProfileEditDto;
-import pl.ujbtrinity.devplatform.entity.User;
+import pl.ujbtrinity.devplatform.dto.UserEmailChangeDto;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.security.Principal;
-import java.time.LocalDate;
 
 @RestController
 public class UserProfileController {
@@ -22,8 +20,8 @@ public class UserProfileController {
     }
 
     private static final String USER_PROFILE_ENDPOINT = "/user/profile";
-    private static final String USER_PROFILE_EDIT_ENDPOINT = "/user/profile/personals/edit";
-    private static final String USER_PASSWORD_EDIT_ENDPOINT = "/user/profile/password/edit";
+    private static final String USER_PROFILE_EDIT_ENDPOINT = "/user/profile/email/change";
+    private static final String USER_PASSWORD_EDIT_ENDPOINT = "/user/profile/password/change";
 
 
     @GetMapping(USER_PROFILE_ENDPOINT)
@@ -36,15 +34,15 @@ public class UserProfileController {
     }
 
     @PostMapping(USER_PROFILE_EDIT_ENDPOINT)
-    public String editPersonals(Principal principal, @RequestBody UserProfileEditDto userProfileEditDto) {
-        userService.editUserPersonals(userProfileEditDto, principal.getName());
-        return "User data changed";
+    public String editUserEmail(Principal principal, @RequestBody UserEmailChangeDto userProfileEditDto) {
+        userService.editUserEmail(userProfileEditDto, principal.getName());
+        return "User email changed";
     }
 
     @PostMapping(USER_PASSWORD_EDIT_ENDPOINT)
-    public String editPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
+    public String editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
         userService.editUserPassword(passwordChangeDto,principal.getName());
-        return "Password changed";
+        return "User password changed";
     }
 
 

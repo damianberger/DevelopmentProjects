@@ -3,7 +3,7 @@ package pl.ujbtrinity.devplatform.service;
 
 import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserProfileDto;
-import pl.ujbtrinity.devplatform.dto.UserProfileEditDto;
+import pl.ujbtrinity.devplatform.dto.UserEmailChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.User;
 
@@ -14,10 +14,10 @@ public interface UserService {
     UserProfileDto getUserProfile(String username);
     void registerCustomer (UserRegistrationDto userRegistrationDto);
     void registerDeveloper (UserRegistrationDto userRegistrationDto);
-    void editUserPersonals (UserProfileEditDto userProfileEditDto, String username);
+    void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     List<User> findAll();
     User readUser(long id);
-    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
     void createSuperAdmin(User user);
 }

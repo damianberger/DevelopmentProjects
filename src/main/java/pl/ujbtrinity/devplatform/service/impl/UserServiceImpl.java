@@ -4,7 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserProfileDto;
-import pl.ujbtrinity.devplatform.dto.UserProfileEditDto;
+import pl.ujbtrinity.devplatform.dto.UserEmailChangeDto;
 import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.Role;
 import pl.ujbtrinity.devplatform.entity.User;
@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDto getUserProfile(String username) {
-        UserProfileDto userProfile = UserProfileDto.fromUser(findByUsername(username));
-        return userProfile;
+        return UserProfileDto.fromUser(findByUsername(username));
     }
 
     @Override
@@ -76,22 +75,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUserPersonals(UserProfileEditDto userProfileEditDto, String username) {
+    public void editUserEmail(UserEmailChangeDto userEmailChangeDto, String username) {
         User user = userRepository.findByUsername(username);
-        user.setUsername(userProfileEditDto.getUsername());
-        user.setFirstName(userProfileEditDto.getFirstName());
-        user.setEmail(userProfileEditDto.getEmail());
-        user.setLastName(userProfileEditDto.getLastName());
-        user.setUpdated(LocalDate.now());
-        userRepository.save(user);
+        if (passwordEncoder.matches(userEmailChangeDto.getCurrentPassword(), user.getPassword())) {
+            user.setEmail(userEmailChangeDto.getEmail());
+            user.setUpdated(LocalDate.now());
+            userRepository.save(user);
+        }
     }
 
     @Override
     public void editUserPassword(PasswordChangeDto passwordChangeDto, String username) {
         User user = userRepository.findByUsername(username);
-        if (passwordEncoder.encode(passwordChangeDto.getCurrentPassword()).equals(user.getPassword())) {
-            if (passwordChangeDto.getNewPassword().equals(passwordChangeDto.getNewPasswordConfirm())) {
+        if (passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), user.getPassword())) {
+            if (passwordChangeDto.getNewPassword().matches(passwordChangeDto.getNewPasswordConfirm())) {
                 user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+                user.setUpdated(LocalDate.now());
+                userRepository.save(user);
             }
         }
     }
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return userRepository.existsUserByEmail(email);
+    public boolean existsByUsername(String username) {
+        return userRepository.existsUserByUsername(username);
     }
 }

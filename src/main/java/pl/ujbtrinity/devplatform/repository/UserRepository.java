@@ -8,5 +8,5 @@ import pl.ujbtrinity.devplatform.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername (String username);
 
-    boolean existsUserByEmail(String email);
+    boolean existsUserByUsername(String username);
 }
