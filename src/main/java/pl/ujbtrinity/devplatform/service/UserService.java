@@ -13,6 +13,7 @@ public interface UserService {
     void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     void editUserFrameworks (UserFrameworkDto userFrameworkDto, String username);
+    void editUserTechnologies (UserTechnologyDto userTechnologyDto, String username);
     List<User> findAll();
     User readUser(long id);
     boolean existsByUsername(String username);

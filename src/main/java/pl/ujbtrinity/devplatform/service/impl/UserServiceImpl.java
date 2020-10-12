@@ -103,8 +103,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
         Set<String> frameworks = (frameworkRepository.findAll()
                 .stream().map(Framework::getName)
-                .collect(Collectors.toSet())
-        );
+                .collect(Collectors.toSet()));
         Set<String> userFrameworks = frameworks.stream()
                 .distinct()
                 .filter(userFrameworkDto.getFrameworks()::contains)
@@ -115,6 +114,24 @@ public class UserServiceImpl implements UserService {
             frameworksToDB.add(frameworkRepository.findByName(frameworkToDB));
         }
         user.setFrameworks(frameworksToDB);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void editUserTechnologies(UserTechnologyDto userTechnologyDto, String username) {
+        User user = userRepository.findByUsername(username);
+        Set<String> technologies = (technologyRepository.findAll())
+                .stream().map(Technology::getName)
+                .collect(Collectors.toSet());
+        Set<String> userTechnologies = technologies.stream()
+                .distinct()
+                .filter(userTechnologyDto.getTechnologies()::contains)
+                .collect(Collectors.toSet());
+        Set<Technology> technologiesToDB = new HashSet<>();
+        for (String technologyToDB : userTechnologies) {
+            technologiesToDB.add(technologyRepository.findByName(technologyToDB));
+        }
+        user.setTechnologies(technologiesToDB);
         userRepository.save(user);
     }
 

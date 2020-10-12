@@ -3,10 +3,7 @@ package pl.ujbtrinity.devplatform.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
-import pl.ujbtrinity.devplatform.dto.UserFrameworkDto;
-import pl.ujbtrinity.devplatform.dto.UserProfileDto;
-import pl.ujbtrinity.devplatform.dto.UserEmailChangeDto;
+import pl.ujbtrinity.devplatform.dto.*;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.security.Principal;
@@ -24,6 +21,7 @@ public class UserProfileController {
     private static final String USER_EMAIL_CHANGE_ENDPOINT = "/user/profile/email/change";
     private static final String USER_PASSWORD_CHANGE_ENDPOINT = "/user/profile/password/change";
     private static final String USER_FRAMEWORKS_EDITION_ENDPOINT = "/user/profile/frameworks/edit";
+    private static final String USER_TECHNOLOGIES_EDITION_ENDPOINT = "/user/profile/technologies/edit";
 
 
     @GetMapping(USER_PROFILE_ENDPOINT)
@@ -48,10 +46,10 @@ public class UserProfileController {
     }
 
 
-    @PostMapping("user/technologies/{id}")
-    public String addTechnologiesUsedByCurrentUser(@PathVariable String id) {
-        // complementing the technologies used
-        return "user technologies/next step";
+    @PostMapping(USER_TECHNOLOGIES_EDITION_ENDPOINT)
+    public String addTechnologiesUsedByCurrentUser(Principal principal, @RequestBody UserTechnologyDto userTechnologyDto) {
+        userService.editUserTechnologies(userTechnologyDto, principal.getName());
+        return "User technologies updated";
     }
 
     @PostMapping(USER_FRAMEWORKS_EDITION_ENDPOINT)

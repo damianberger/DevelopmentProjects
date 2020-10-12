@@ -6,6 +6,7 @@ import pl.ujbtrinity.devplatform.entity.Technology;
 
 @Repository
 public interface TechnologyRepository extends JpaRepository<Technology, Long> {
+    Technology findByName(String name);
 
     boolean existsTechnologyByName(String name);
 }
