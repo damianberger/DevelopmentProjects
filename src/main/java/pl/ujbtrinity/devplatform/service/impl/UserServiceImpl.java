@@ -2,14 +2,15 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
-import pl.ujbtrinity.devplatform.dto.UserProfileDto;
-import pl.ujbtrinity.devplatform.dto.UserEmailChangeDto;
-import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
+import pl.ujbtrinity.devplatform.dto.*;
+import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Role;
+import pl.ujbtrinity.devplatform.entity.Technology;
 import pl.ujbtrinity.devplatform.entity.User;
 import pl.ujbtrinity.devplatform.model.Status;
+import pl.ujbtrinity.devplatform.repository.FrameworkRepository;
 import pl.ujbtrinity.devplatform.repository.RoleRepository;
+import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
 import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.UserService;
 
@@ -18,16 +19,22 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final FrameworkRepository frameworkRepository;
+    private final TechnologyRepository technologyRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.frameworkRepository = frameworkRepository;
+        this.technologyRepository = technologyRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -43,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(UserRegistrationDto userRegistrationDto) {
-        if(userRegistrationDto.getPassword().matches(userRegistrationDto.getPasswordConfirmation())) {
+        if (userRegistrationDto.getPassword().matches(userRegistrationDto.getPasswordConfirmation())) {
             User user = userRegistrationDto.toUser();
             user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
             user.setCreated(LocalDate.now());
@@ -59,7 +66,6 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
     }
-
 
     @Override
     public void createSuperAdmin(User user) {
@@ -90,6 +96,26 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user);
             }
         }
+    }
+
+    @Override
+    public void editUserFrameworks(UserFrameworkDto userFrameworkDto, String username) {
+        User user = userRepository.findByUsername(username);
+        Set<String> frameworks = (frameworkRepository.findAll()
+                .stream().map(Framework::getName)
+                .collect(Collectors.toSet())
+        );
+        Set<String> userFrameworks = frameworks.stream()
+                .distinct()
+                .filter(userFrameworkDto.getFrameworks()::contains)
+                .collect(Collectors.toSet());
+
+        Set<Framework> frameworksToDB = new HashSet<>();
+        for (String frameworkToDB : userFrameworks) {
+            frameworksToDB.add(frameworkRepository.findByName(frameworkToDB));
+        }
+        user.setFrameworks(frameworksToDB);
+        userRepository.save(user);
     }
 
     @Override

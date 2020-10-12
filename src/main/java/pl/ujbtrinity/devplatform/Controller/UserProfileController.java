@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.ujbtrinity.devplatform.dto.PasswordChangeDto;
+import pl.ujbtrinity.devplatform.dto.UserFrameworkDto;
 import pl.ujbtrinity.devplatform.dto.UserProfileDto;
 import pl.ujbtrinity.devplatform.dto.UserEmailChangeDto;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
@@ -20,8 +21,9 @@ public class UserProfileController {
     }
 
     private static final String USER_PROFILE_ENDPOINT = "/user/profile";
-    private static final String USER_PROFILE_EDIT_ENDPOINT = "/user/profile/email/change";
-    private static final String USER_PASSWORD_EDIT_ENDPOINT = "/user/profile/password/change";
+    private static final String USER_EMAIL_CHANGE_ENDPOINT = "/user/profile/email/change";
+    private static final String USER_PASSWORD_CHANGE_ENDPOINT = "/user/profile/password/change";
+    private static final String USER_FRAMEWORKS_EDITION_ENDPOINT = "/user/profile/frameworks/edit";
 
 
     @GetMapping(USER_PROFILE_ENDPOINT)
@@ -33,13 +35,13 @@ public class UserProfileController {
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
-    @PostMapping(USER_PROFILE_EDIT_ENDPOINT)
+    @PostMapping(USER_EMAIL_CHANGE_ENDPOINT)
     public String editUserEmail(Principal principal, @RequestBody UserEmailChangeDto userProfileEditDto) {
         userService.editUserEmail(userProfileEditDto, principal.getName());
         return "User email changed";
     }
 
-    @PostMapping(USER_PASSWORD_EDIT_ENDPOINT)
+    @PostMapping(USER_PASSWORD_CHANGE_ENDPOINT)
     public String editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
         userService.editUserPassword(passwordChangeDto,principal.getName());
         return "User password changed";
@@ -52,10 +54,10 @@ public class UserProfileController {
         return "user technologies/next step";
     }
 
-    @PostMapping("user/frameworks/{id}")
-    public String addFrameworksUsedByCurrentUser(@PathVariable String id) {
-        // complementing the frameworks used
-        return "user frameworks/next step";
+    @PostMapping(USER_FRAMEWORKS_EDITION_ENDPOINT)
+    public String addFrameworksUsedByCurrentUser(Principal principal, @RequestBody UserFrameworkDto userFrameworkDto) {
+        userService.editUserFrameworks(userFrameworkDto, principal.getName());
+        return "User frameworks updated";
     }
 
     @PostMapping("user/photo/{id}")
