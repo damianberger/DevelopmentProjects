@@ -2,11 +2,15 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
+import pl.ujbtrinity.devplatform.dto.*;
+import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Role;
+import pl.ujbtrinity.devplatform.entity.Technology;
 import pl.ujbtrinity.devplatform.entity.User;
 import pl.ujbtrinity.devplatform.model.Status;
+import pl.ujbtrinity.devplatform.repository.FrameworkRepository;
 import pl.ujbtrinity.devplatform.repository.RoleRepository;
+import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
 import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.UserService;
 
@@ -15,16 +19,22 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final FrameworkRepository frameworkRepository;
+    private final TechnologyRepository technologyRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.frameworkRepository = frameworkRepository;
+        this.technologyRepository = technologyRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -34,27 +44,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerCustomer(UserRegistrationDto userRegistrationDto) {
-        User user = userRegistrationDto.toUser();
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        user.setCreated(LocalDate.now());
-        user.setUpdated(LocalDate.now());
-        user.setStatus(Status.ACTIVE);
-        Role userRole = roleRepository.findByName("ROLE_CUSTOMER");
-        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
-        userRepository.save(user);
+    public UserProfileDto getUserProfile(String username) {
+        return UserProfileDto.fromUser(findByUsername(username));
     }
 
     @Override
-    public void registerDeveloper(UserRegistrationDto userRegistrationDto) {
-        User user = userRegistrationDto.toUser();
-        user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        user.setCreated(LocalDate.now());
-        user.setUpdated(LocalDate.now());
-        user.setStatus(Status.ACTIVE);
-        Role userRole = roleRepository.findByName("ROLE_DEVELOPER");
-        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
-        userRepository.save(user);
+    public void register(UserRegistrationDto userRegistrationDto) {
+        if (userRegistrationDto.getPassword().matches(userRegistrationDto.getPasswordConfirmation())) {
+            User user = userRegistrationDto.toUser();
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+            user.setCreated(LocalDate.now());
+            user.setUpdated(LocalDate.now());
+            user.setStatus(Status.ACTIVE);
+            Role userRole;
+            if (userRegistrationDto.getRole().equals("Developer")) {
+                userRole = roleRepository.findByName("ROLE_DEVELOPER");
+            } else {
+                userRole = roleRepository.findByName("ROLE_CUSTOMER");
+            }
+            user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+            userRepository.save(user);
+        }
     }
 
     @Override
@@ -67,16 +77,61 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(User user) {
-        User userFromDB = userRepository.getOne(user.getId());
-        userFromDB.setUsername(user.getUsername());
-        userFromDB.setFirstName(user.getFirstName());
-        userFromDB.setLastName(user.getLastName());
-        userFromDB.setPassword(passwordEncoder.encode(user.getPassword()));
-        userFromDB.setCreated(user.getCreated());
-        userFromDB.setUpdated(LocalDate.now());
-        userFromDB.setStatus(user.getStatus());
-        userFromDB.setRoles(user.getRoles());
+    public void editUserEmail(UserEmailChangeDto userEmailChangeDto, String username) {
+        User user = userRepository.findByUsername(username);
+        if (passwordEncoder.matches(userEmailChangeDto.getCurrentPassword(), user.getPassword())) {
+            user.setEmail(userEmailChangeDto.getEmail());
+            user.setUpdated(LocalDate.now());
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void editUserPassword(PasswordChangeDto passwordChangeDto, String username) {
+        User user = userRepository.findByUsername(username);
+        if (passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), user.getPassword())) {
+            if (passwordChangeDto.getNewPassword().matches(passwordChangeDto.getNewPasswordConfirm())) {
+                user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+                user.setUpdated(LocalDate.now());
+                userRepository.save(user);
+            }
+        }
+    }
+
+    @Override
+    public void editUserFrameworks(UserFrameworkDto userFrameworkDto, String username) {
+        User user = userRepository.findByUsername(username);
+        Set<String> frameworks = (frameworkRepository.findAll()
+                .stream().map(Framework::getName)
+                .collect(Collectors.toSet()));
+        Set<String> userFrameworks = frameworks.stream()
+                .distinct()
+                .filter(userFrameworkDto.getFrameworks()::contains)
+                .collect(Collectors.toSet());
+
+        Set<Framework> frameworksToDB = new HashSet<>();
+        for (String frameworkToDB : userFrameworks) {
+            frameworksToDB.add(frameworkRepository.findByName(frameworkToDB));
+        }
+        user.setFrameworks(frameworksToDB);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void editUserTechnologies(UserTechnologyDto userTechnologyDto, String username) {
+        User user = userRepository.findByUsername(username);
+        Set<String> technologies = (technologyRepository.findAll())
+                .stream().map(Technology::getName)
+                .collect(Collectors.toSet());
+        Set<String> userTechnologies = technologies.stream()
+                .distinct()
+                .filter(userTechnologyDto.getTechnologies()::contains)
+                .collect(Collectors.toSet());
+        Set<Technology> technologiesToDB = new HashSet<>();
+        for (String technologyToDB : userTechnologies) {
+            technologiesToDB.add(technologyRepository.findByName(technologyToDB));
+        }
+        user.setTechnologies(technologiesToDB);
         userRepository.save(user);
     }
 
@@ -91,7 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return userRepository.existsUserByEmail(email);
+    public boolean existsByUsername(String username) {
+        return userRepository.existsUserByUsername(username);
     }
 }

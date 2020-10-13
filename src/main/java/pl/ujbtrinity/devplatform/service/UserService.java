@@ -1,18 +1,21 @@
 package pl.ujbtrinity.devplatform.service;
 
 
-import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
+import pl.ujbtrinity.devplatform.dto.*;
 import pl.ujbtrinity.devplatform.entity.User;
 
 import java.util.List;
 
 public interface UserService {
     User findByUsername (String username);
-    void registerCustomer (UserRegistrationDto userRegistrationDto);
-    void registerDeveloper (UserRegistrationDto userRegistrationDto);
-    void editUser (User user);
+    UserProfileDto getUserProfile(String username);
+    void register (UserRegistrationDto userRegistrationDto);
+    void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
+    void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
+    void editUserFrameworks (UserFrameworkDto userFrameworkDto, String username);
+    void editUserTechnologies (UserTechnologyDto userTechnologyDto, String username);
     List<User> findAll();
     User readUser(long id);
-    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
     void createSuperAdmin(User user);
 }

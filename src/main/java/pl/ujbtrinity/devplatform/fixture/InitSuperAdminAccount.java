@@ -30,7 +30,7 @@ public class InitSuperAdminAccount {
         user.setCreated(LocalDate.now());
         user.setUpdated(LocalDate.now());
         user.setPassword(password);
-        boolean existingAdmin = userService.existsByEmail(email);
+        boolean existingAdmin = userService.existsByUsername("SuperAdmin");
         if(!existingAdmin){
             userService.createSuperAdmin(user);
         }
