@@ -4,6 +4,7 @@ import lombok.Data;
 import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Project;
 import pl.ujbtrinity.devplatform.entity.Technology;
+import pl.ujbtrinity.devplatform.entity.User;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ public class ProjectViewDto {
     private String creator;
     private Set<String> frameworks;
     private Set<String> technologies;
+    private Set<String> users;
 
     public static ProjectViewDto fromProject(Project project) {
         ProjectViewDto projectViewDto = new ProjectViewDto();
@@ -28,6 +30,9 @@ public class ProjectViewDto {
                 .collect(Collectors.toSet()));
         projectViewDto.setTechnologies(project.getTechnologiesUsed()
                 .stream().map(Technology::getName)
+                .collect(Collectors.toSet()));
+        projectViewDto.setUsers(project.getUsers()
+                .stream().map(User::getUsername)
                 .collect(Collectors.toSet()));
         return projectViewDto;
     }
