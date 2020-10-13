@@ -1,6 +1,7 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.stereotype.Service;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectViewDto;
 import pl.ujbtrinity.devplatform.entity.Project;
 import pl.ujbtrinity.devplatform.entity.Technology;
 import pl.ujbtrinity.devplatform.repository.ProjectRepository;
@@ -44,7 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project readProject(long id) {
-        return projectRepository.getOne(id);
+    public ProjectViewDto viewProject(Long id) {
+        return ProjectViewDto.fromProject(projectRepository.getOne(id));
     }
 }

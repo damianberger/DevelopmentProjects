@@ -1,4 +1,4 @@
-package pl.ujbtrinity.devplatform.dto;
+package pl.ujbtrinity.devplatform.dto.userDto;
 
 import lombok.Data;
 

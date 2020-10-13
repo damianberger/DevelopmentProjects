@@ -1,7 +1,7 @@
 package pl.ujbtrinity.devplatform.service;
 
 
-import pl.ujbtrinity.devplatform.dto.*;
+import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.entity.User;
 
 import java.util.List;

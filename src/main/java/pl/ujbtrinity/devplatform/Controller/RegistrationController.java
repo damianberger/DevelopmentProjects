@@ -3,7 +3,7 @@ package pl.ujbtrinity.devplatform.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
+import pl.ujbtrinity.devplatform.dto.userDto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 @RestController
