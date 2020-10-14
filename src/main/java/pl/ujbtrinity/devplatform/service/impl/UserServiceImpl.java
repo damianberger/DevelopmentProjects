@@ -2,7 +2,7 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.ujbtrinity.devplatform.dto.*;
+import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Role;
 import pl.ujbtrinity.devplatform.entity.Technology;

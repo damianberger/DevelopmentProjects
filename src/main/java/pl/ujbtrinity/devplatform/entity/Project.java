@@ -20,6 +20,9 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @ManyToOne
+    private User creator;
+
     @ManyToMany(mappedBy = "projects")
     private Set<User> users;
 
@@ -32,5 +35,6 @@ public class Project {
     @JoinTable(name = "projects_frameworks", joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "framework_id"))
     private Set<Framework> frameworksUsed;
+
 
 }

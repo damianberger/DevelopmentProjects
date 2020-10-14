@@ -3,7 +3,7 @@ package pl.ujbtrinity.devplatform.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.ujbtrinity.devplatform.dto.*;
+import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.security.Principal;

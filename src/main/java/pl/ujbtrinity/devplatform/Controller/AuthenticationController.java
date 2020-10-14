@@ -5,7 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.ujbtrinity.devplatform.dto.AuthenticationDto;
+import pl.ujbtrinity.devplatform.dto.userDto.AuthenticationDto;
 import pl.ujbtrinity.devplatform.security.JwtUtility;
 
 @RestController

@@ -1,4 +1,4 @@
-package pl.ujbtrinity.devplatform.dto;
+package pl.ujbtrinity.devplatform.dto.userDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

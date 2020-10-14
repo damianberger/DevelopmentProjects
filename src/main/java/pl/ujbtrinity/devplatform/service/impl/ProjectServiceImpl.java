@@ -1,24 +1,69 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.stereotype.Service;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectCreateDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectViewDto;
+import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Project;
 import pl.ujbtrinity.devplatform.entity.Technology;
+import pl.ujbtrinity.devplatform.entity.User;
+import pl.ujbtrinity.devplatform.repository.FrameworkRepository;
 import pl.ujbtrinity.devplatform.repository.ProjectRepository;
+import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
+import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.ProjectService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
+    private final FrameworkRepository frameworkRepository;
+    private final TechnologyRepository technologyRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository) {
         this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.frameworkRepository = frameworkRepository;
+        this.technologyRepository = technologyRepository;
     }
 
     @Override
-    public void createProject(Project project) {
+    public void createProject(ProjectCreateDto projectCreateDto, String username) {
+        User user = userRepository.findByUsername(username);
+        Project project = projectCreateDto.toProject();
+        project.setCreator(user);
+
+        Set<String> frameworks = frameworkRepository.findAll()
+                .stream().map(Framework::getName)
+                .collect(Collectors.toSet());
+        Set<String> projectFrameworks = frameworks.stream()
+                .distinct()
+                .filter(projectCreateDto.getFrameworks()::contains)
+                .collect(Collectors.toSet());
+        Set<Framework> frameworksToDB = new HashSet<>();
+        for(String frameworkToDb : projectFrameworks){
+            frameworksToDB.add(frameworkRepository.findByName(frameworkToDb));
+        }
+        project.setFrameworksUsed(frameworksToDB);
+
+        Set<String> technologies = technologyRepository.findAll()
+                .stream().map(Technology::getName)
+                .collect(Collectors.toSet());
+        Set<String> projectTechnologies = technologies.stream()
+                .distinct()
+                .filter(projectCreateDto.getTechnologies()::contains)
+                .collect(Collectors.toSet());
+        Set<Technology> technologiesToDB = new HashSet<>();
+        for (String technologyToDB : projectTechnologies) {
+            technologiesToDB.add(technologyRepository.findByName(technologyToDB));
+        }
+        project.setTechnologiesUsed(technologiesToDB);
         projectRepository.save(project);
     }
 
@@ -44,7 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project readProject(long id) {
-        return projectRepository.getOne(id);
+    public ProjectViewDto viewProject(Long id) {
+        return ProjectViewDto.fromProject(projectRepository.getOne(id));
     }
 }
