@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
             user.setCreated(LocalDate.now());
             user.setUpdated(LocalDate.now());
-            user.setStatus(Status.ACTIVE);
+            user.setStatus(Status.NOT_ACTIVE);
             Role userRole;
             if (userRegistrationDto.getRole().equals("Developer")) {
                 userRole = roleRepository.findByName("ROLE_DEVELOPER");
@@ -65,6 +65,19 @@ public class UserServiceImpl implements UserService {
             user.setRoles(new HashSet<>(Arrays.asList(userRole)));
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public void setStatus(String userName) {
+        User user = userRepository.findByUsername(userName);
+        user.setPassword(user.getPassword());
+        user.setCreated(user.getCreated());
+        user.setUpdated(user.getUpdated());
+        user.setStatus(Status.ACTIVE);
+        Role userRole;
+        userRole = roleRepository.findByName(user.getRoles().toString());
+        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
+        userRepository.save(user);
     }
 
     @Override

@@ -10,6 +10,7 @@ public interface UserService {
     User findByUsername (String username);
     UserProfileDto getUserProfile(String username);
     void register (UserRegistrationDto userRegistrationDto);
+    void setStatus (String userName);
     void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     void editUserFrameworks (UserFrameworkDto userFrameworkDto, String username);
