@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectCreateDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchDto;
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectViewDto;
 import pl.ujbtrinity.devplatform.service.impl.ProjectServiceImpl;
 
@@ -20,6 +21,7 @@ public class ProjectManagementController {
 
     private static final String PROJECT_CREATION_ENDPOINT = "/project/create";
     private static final String PROJECT_VIEW_ENDPOINT = "/project/view/{id}";
+    private static final String PROJECT_SEARCH_ENDPOINT = "/projects";
 
     @PostMapping(PROJECT_CREATION_ENDPOINT)
     public String createNewProject(@RequestBody ProjectCreateDto projectCreateDto, Principal principal){
@@ -35,4 +37,9 @@ public class ProjectManagementController {
         }
         return new ResponseEntity<>(projectViewDto,HttpStatus.OK);
     }
+
+//    @GetMapping(PROJECT_SEARCH_ENDPOINT)
+//    public ResponseEntity<ProjectSearchDto> searchProjects(){
+//        return new ResponseEntity<>();
+//    }
 }

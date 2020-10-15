@@ -2,7 +2,6 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.entity.ResetPasswordToken;
-import pl.ujbtrinity.devplatform.entity.VerificationToken;
 import pl.ujbtrinity.devplatform.repository.ResetPasswordTokenRepository;
 import pl.ujbtrinity.devplatform.service.ResetPasswordTokenService;
 

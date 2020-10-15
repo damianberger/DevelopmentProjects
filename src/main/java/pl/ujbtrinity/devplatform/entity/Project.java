@@ -3,8 +3,11 @@ package pl.ujbtrinity.devplatform.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -19,6 +22,10 @@ public class Project {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @CreatedDate
+    @Column(name = "created")
+    private LocalDate created;
 
     @ManyToOne
     private User creator;
