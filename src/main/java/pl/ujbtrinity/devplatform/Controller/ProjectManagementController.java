@@ -4,11 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectCreateDto;
-import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchReceivedDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchRequestedDto;
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectViewDto;
 import pl.ujbtrinity.devplatform.service.impl.ProjectServiceImpl;
 
 import java.security.Principal;
+import java.util.List;
+
 
 @RestController
 public class ProjectManagementController {
@@ -38,8 +41,9 @@ public class ProjectManagementController {
         return new ResponseEntity<>(projectViewDto,HttpStatus.OK);
     }
 
-//    @GetMapping(PROJECT_SEARCH_ENDPOINT)
-//    public ResponseEntity<ProjectSearchDto> searchProjects(){
-//        return new ResponseEntity<>();
-//    }
+    @PostMapping(PROJECT_SEARCH_ENDPOINT)
+    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto){
+        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
+        return new ResponseEntity<>(projectFound,HttpStatus.OK);
+    }
 }

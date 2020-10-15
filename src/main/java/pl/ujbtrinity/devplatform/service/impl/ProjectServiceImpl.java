@@ -2,6 +2,8 @@ package pl.ujbtrinity.devplatform.service.impl;
 
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectCreateDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchReceivedDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchRequestedDto;
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectViewDto;
 import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Project;
@@ -13,9 +15,7 @@ import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
 import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.ProjectService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,13 +79,20 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findAll() {
-        return projectRepository.findAll();
-    }
-
-    @Override
-    public List<Project> findByTechnologyUsed(Technology technology) {
-        return projectRepository.findByTechnologiesUsedEquals(technology);
+    public List<ProjectSearchReceivedDto> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
+        List<Project> projects = projectRepository.findAll();
+        List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
+        for (Project project: projects) {
+        ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
+        projectsFound.add(projectReceived);
+        }
+        return projectsFound.stream()
+                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getName().matches(projectSearchRequestedDto.getName()))
+                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isAfter(projectSearchRequestedDto.getCreatedAfter()))
+                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isBefore(projectSearchRequestedDto.getCreatedBefore()))
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getTechnologies().equals(projectSearchRequestedDto.getTechnologies()))
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().equals(projectSearchRequestedDto.getFrameworks()))
+                .collect(Collectors.toList());
     }
 
     @Override
