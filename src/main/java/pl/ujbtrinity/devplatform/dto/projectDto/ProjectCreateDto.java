@@ -12,7 +12,6 @@ import java.util.Set;
 public class ProjectCreateDto {
     private String name;
     private String description;
-    private String creator;
     private LocalDate created;
     private Set<String> frameworks;
     private Set<String> technologies;

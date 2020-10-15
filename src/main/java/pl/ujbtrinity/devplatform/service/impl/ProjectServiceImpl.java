@@ -15,6 +15,7 @@ import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
 import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.ProjectService;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -87,11 +88,11 @@ public class ProjectServiceImpl implements ProjectService {
         projectsFound.add(projectReceived);
         }
         return projectsFound.stream()
-                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getName().matches(projectSearchRequestedDto.getName()))
+                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getName().toLowerCase().contains(projectSearchRequestedDto.getName().toLowerCase()))
                 .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isAfter(projectSearchRequestedDto.getCreatedAfter()))
                 .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isBefore(projectSearchRequestedDto.getCreatedBefore()))
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getTechnologies().equals(projectSearchRequestedDto.getTechnologies()))
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().equals(projectSearchRequestedDto.getFrameworks()))
+                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getTechnologies().containsAll(projectSearchRequestedDto.getTechnologies()))
+                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().containsAll(projectSearchRequestedDto.getFrameworks()))
                 .collect(Collectors.toList());
     }
 
