@@ -126,8 +126,15 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
+
+
     @Override
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
+    }
+
+    @Override
+    public void removeUsersFromProject(Long id) {
+        userRepository.removeUsersFromProject(id);
     }
 }

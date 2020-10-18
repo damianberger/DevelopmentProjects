@@ -60,6 +60,7 @@ public class ProjectManagementController {
             return new ResponseEntity<>("Project doesn't exist",HttpStatus.NO_CONTENT);
         }else {
             if (projectOwner.getId().equals(project.get().getCreator().getId())) {
+                projectService.removeUsersFromProject(id);
                 projectService.deleteProject(id);
                 return new ResponseEntity<>("Project deleted", HttpStatus.OK);
             } else {
