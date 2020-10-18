@@ -12,6 +12,7 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -53,7 +54,7 @@ public class ProjectManagementController {
     }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
-    public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) throws InterruptedException {
         User projectOwner = userService.findByUsername(principal.getName());
         Optional<Project> project = projectService.findById(id);
         if(!project.isPresent()){
