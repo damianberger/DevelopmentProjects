@@ -1,5 +1,6 @@
 package pl.ujbtrinity.devplatform.Controller;
 
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.VerificationTokenServiceImpl;
 
 import javax.mail.MessagingException;
+import java.sql.SQLOutput;
 
 @RestController
 public class RegistrationController {
