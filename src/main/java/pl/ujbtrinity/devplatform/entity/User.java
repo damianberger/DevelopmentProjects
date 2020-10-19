@@ -66,7 +66,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "framework_id"))
     private Set<Framework> frameworks;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinTable(name = "user_projects", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Set<Project> projects;

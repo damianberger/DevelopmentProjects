@@ -6,6 +6,7 @@ import pl.ujbtrinity.devplatform.entity.Project;
 import pl.ujbtrinity.devplatform.entity.Technology;
 import pl.ujbtrinity.devplatform.entity.User;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public class ProjectViewDto {
     private String name;
     private String description;
     private String creator;
+    private LocalDate created;
     private Set<String> frameworks;
     private Set<String> technologies;
     private Set<String> users;
@@ -25,6 +27,7 @@ public class ProjectViewDto {
         projectViewDto.setName(project.getName());
         projectViewDto.setDescription(project.getDescription());
         projectViewDto.setCreator(project.getCreator().getUsername());
+        projectViewDto.setCreated(project.getCreated());
         projectViewDto.setFrameworks(project.getFrameworksUsed()
                 .stream().map(Framework::getName)
                 .collect(Collectors.toSet()));

@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.ujbtrinity.devplatform.dto.userDto.UserRegistrationDto;
 import org.springframework.web.bind.annotation.*;
-import pl.ujbtrinity.devplatform.dto.UserRegistrationDto;
 import pl.ujbtrinity.devplatform.entity.User;
 import pl.ujbtrinity.devplatform.entity.VerificationToken;
 import pl.ujbtrinity.devplatform.service.impl.EmailServiceImpl;
