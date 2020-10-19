@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import pl.ujbtrinity.devplatform.model.Status;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -23,19 +25,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true ,length = 20)
     private String username;
 
-    @Column(name = "email")
+    @Email
+    @Column(name = "email", nullable = false, unique = true, length = 60)
     private String email;
 
-    @Column(name = "firstName")
+    @Column(name = "firstName", nullable = false)
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "lastName", nullable = false)
     private String lastName;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false, length = 60)
     private String password;
 
     @CreatedDate
