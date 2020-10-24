@@ -22,6 +22,7 @@ public class UserProfileController {
     private static final String USER_PASSWORD_CHANGE_ENDPOINT = "/user/profile/password/change";
     private static final String USER_FRAMEWORKS_EDITION_ENDPOINT = "/user/profile/frameworks/edit";
     private static final String USER_TECHNOLOGIES_EDITION_ENDPOINT = "/user/profile/technologies/edit";
+    private static final String USER_PERSONALS_CHANGE_ENDPOINT = "/user/personals/edit";
 
 
     @GetMapping(USER_PROFILE_ENDPOINT)
@@ -56,6 +57,12 @@ public class UserProfileController {
     public String addFrameworksUsedByCurrentUser(Principal principal, @RequestBody UserFrameworkDto userFrameworkDto) {
         userService.editUserFrameworks(userFrameworkDto, principal.getName());
         return "User frameworks updated";
+    }
+
+    @PostMapping(USER_PERSONALS_CHANGE_ENDPOINT)
+    public String editUserPersonals(Principal principal, @RequestBody UserProfileChangeDto userProfileChangeDto) {
+        userService.editUserPersonals(userProfileChangeDto, principal.getName());
+        return "User personals updated";
     }
 
     @PostMapping("user/photo/{id}")
