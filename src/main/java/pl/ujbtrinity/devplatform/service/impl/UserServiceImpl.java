@@ -149,6 +149,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void editUserPersonals(UserProfileChangeDto userProfileChangeDto, String username) {
+        User user = userRepository.findByUsername(username);
+        user.setFirstName(userProfileChangeDto.getFirstName());
+        user.setLastName(userProfileChangeDto.getLastName());
+        user.setUsername(userProfileChangeDto.getUsername());
+        user.setDescription(userProfileChangeDto.getDescription());
+        user.setCity(userProfileChangeDto.getCity());
+        userRepository.save(user);
+    }
+
+    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }

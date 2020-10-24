@@ -15,6 +15,7 @@ public interface UserService {
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     void editUserFrameworks (UserFrameworkDto userFrameworkDto, String username);
     void editUserTechnologies (UserTechnologyDto userTechnologyDto, String username);
+    void editUserPersonals (UserProfileChangeDto userProfileChangeDto, String username);
     List<User> findAll();
     User readUser(long id);
     boolean existsByUsername(String username);
