@@ -1,9 +1,11 @@
 package pl.ujbtrinity.devplatform.service;
 
 
+import org.springframework.web.multipart.MultipartFile;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.entity.User;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -20,4 +22,5 @@ public interface UserService {
     User readUser(long id);
     boolean existsByUsername(String username);
     void createSuperAdmin(User user);
+    void savePhoto(MultipartFile file, String username) throws IOException;
 }
