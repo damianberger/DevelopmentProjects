@@ -12,6 +12,8 @@ public class UserRegistrationDto {
     private String email;
     private String firstName;
     private String lastName;
+    private String description;
+    private String city;
     private String password;
     private String passwordConfirmation;
     private String role;
@@ -22,6 +24,8 @@ public class UserRegistrationDto {
     user.setEmail(email);
     user.setFirstName(firstName);
     user.setLastName(lastName);
+    user.setLastName(description);
+    user.setLastName(city);
     user.setPassword(password);
     return user;
     }

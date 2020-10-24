@@ -16,6 +16,8 @@ public class UserProfileDto {
     private String email;
     private String firstName;
     private String lastName;
+    private String description;
+    private String city;
     private Set<String> technologies;
     private Set<String> frameworks;
 
@@ -25,6 +27,8 @@ public class UserProfileDto {
         userProfileDto.setFirstName(user.getFirstName());
         userProfileDto.setLastName(user.getLastName());
         userProfileDto.setUsername(user.getUsername());
+        userProfileDto.setDescription(user.getDescription());
+        userProfileDto.setCity(user.getCity());
         userProfileDto.frameworks = user.getFrameworks()
                 .stream().map(Framework::getName)
                 .collect(Collectors.toSet());
