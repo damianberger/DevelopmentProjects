@@ -80,13 +80,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void setStatus(String userName) {
         User user = userRepository.findByUsername(userName);
-        user.setPassword(user.getPassword());
-        user.setCreated(user.getCreated());
-        user.setUpdated(user.getUpdated());
+        user.setUpdated(LocalDate.now());
         user.setStatus(Status.ACTIVE);
-        Role userRole;
-        userRole = roleRepository.findByName(user.getRoles().toString());
-        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         userRepository.save(user);
     }
 
@@ -134,37 +129,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void editUserFrameworks(UserFrameworkDto userFrameworkDto, String username) {
         User user = userRepository.findByUsername(username);
-        Set<String> frameworks = (frameworkRepository.findAll()
-                .stream().map(Framework::getName)
-                .collect(Collectors.toSet()));
-        Set<String> userFrameworks = frameworks.stream()
-                .distinct()
-                .filter(userFrameworkDto.getFrameworks()::contains)
-                .collect(Collectors.toSet());
-
-        Set<Framework> frameworksToDB = new HashSet<>();
-        for (String frameworkToDB : userFrameworks) {
-            frameworksToDB.add(frameworkRepository.findByName(frameworkToDB));
+        Set<Framework> userFrameworks = new HashSet<>();
+        for (String framework : userFrameworkDto.getFrameworks()) {
+            userFrameworks.add(frameworkRepository.findByName(framework));
         }
-        user.setFrameworks(frameworksToDB);
+        user.setFrameworks(userFrameworks);
         userRepository.save(user);
     }
 
     @Override
     public void editUserTechnologies(UserTechnologyDto userTechnologyDto, String username) {
         User user = userRepository.findByUsername(username);
-        Set<String> technologies = (technologyRepository.findAll())
-                .stream().map(Technology::getName)
-                .collect(Collectors.toSet());
-        Set<String> userTechnologies = technologies.stream()
-                .distinct()
-                .filter(userTechnologyDto.getTechnologies()::contains)
-                .collect(Collectors.toSet());
-        Set<Technology> technologiesToDB = new HashSet<>();
-        for (String technologyToDB : userTechnologies) {
-            technologiesToDB.add(technologyRepository.findByName(technologyToDB));
+        Set<Technology> userTechnologies = new HashSet<>();
+        for(String technology: userTechnologyDto.getTechnologies()){
+            userTechnologies.add(technologyRepository.findByName(technology));
         }
-        user.setTechnologies(technologiesToDB);
+        user.setTechnologies(userTechnologies);
         userRepository.save(user);
     }
 

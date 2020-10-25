@@ -41,51 +41,35 @@ public class ProjectServiceImpl implements ProjectService {
         User user = userRepository.findByUsername(username);
         Project project = projectCreateDto.toProject();
         project.setCreator(user);
-
-        Set<String> frameworks = frameworkRepository.findAll()
-                .stream().map(Framework::getName)
-                .collect(Collectors.toSet());
-        Set<String> projectFrameworks = frameworks.stream()
-                .distinct()
-                .filter(projectCreateDto.getFrameworks()::contains)
-                .collect(Collectors.toSet());
-        Set<Framework> frameworksToDB = new HashSet<>();
-        for(String frameworkToDb : projectFrameworks){
-            frameworksToDB.add(frameworkRepository.findByName(frameworkToDb));
+        Set<Technology> projectTechnologies = new HashSet<>();
+        for(String technology: projectCreateDto.getTechnologies()){
+            projectTechnologies.add(technologyRepository.findByName(technology));
         }
-        project.setFrameworksUsed(frameworksToDB);
-
-        Set<String> technologies = technologyRepository.findAll()
-                .stream().map(Technology::getName)
-                .collect(Collectors.toSet());
-        Set<String> projectTechnologies = technologies.stream()
-                .distinct()
-                .filter(projectCreateDto.getTechnologies()::contains)
-                .collect(Collectors.toSet());
-        Set<Technology> technologiesToDB = new HashSet<>();
-        for (String technologyToDB : projectTechnologies) {
-            technologiesToDB.add(technologyRepository.findByName(technologyToDB));
+        project.setTechnologiesUsed(projectTechnologies);
+        Set<Framework> projectFrameworks = new HashSet<>();
+        for(String framework: projectCreateDto.getFrameworks()){
+            projectFrameworks.add(frameworkRepository.findByName(framework));
         }
-        project.setTechnologiesUsed(technologiesToDB);
+        project.setFrameworksUsed(projectFrameworks);
         projectRepository.save(project);
     }
 
-    @Override
-    public List<ProjectSearchReceivedDto> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
-        List<Project> projects = projectRepository.findAll();
-        List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
-        for (Project project: projects) {
-        ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
-        projectsFound.add(projectReceived);
-        }
-        return projectsFound.stream()
-                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getName().toLowerCase().contains(projectSearchRequestedDto.getName().toLowerCase()))
-                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isAfter(projectSearchRequestedDto.getCreatedAfter()))
-                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isBefore(projectSearchRequestedDto.getCreatedBefore()))
-                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getTechnologies().containsAll(projectSearchRequestedDto.getTechnologies()))
-                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().containsAll(projectSearchRequestedDto.getFrameworks()))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<ProjectSearchReceivedDto> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
+//        List<Project> projects = projectRepository.findAll();
+//        List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
+//        for (Project project: projects) {
+//        ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
+//        projectsFound.add(projectReceived);
+//        }
+//        return projectsFound.stream()
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getName().toLowerCase().contains(projectSearchRequestedDto.getName().toLowerCase()))
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isAfter(projectSearchRequestedDto.getCreatedAfter()))
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isBefore(projectSearchRequestedDto.getCreatedBefore()))
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getTechnologies().containsAll(projectSearchRequestedDto.getTechnologies()))
+//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().containsAll(projectSearchRequestedDto.getFrameworks()))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public ProjectViewDto viewProject(Long id) {
@@ -96,32 +80,17 @@ public class ProjectServiceImpl implements ProjectService {
     public void updateProject(ProjectUpdateDto projectUpdateDto) {
         Project project = projectRepository.getOne(projectUpdateDto.getId());
         project.setDescription(projectUpdateDto.getDescription());
-
-        Set<String> technologies = (technologyRepository.findAll())
-                .stream().map(Technology::getName)
-                .collect(Collectors.toSet());
-        Set<String> projectTechnologies = technologies.stream()
-                .distinct()
-                .filter(projectUpdateDto.getTechnologiesUsed()::contains)
-                .collect(Collectors.toSet());
-        Set<Technology> technologiesToDB = new HashSet<>();
-        for (String technologyToDB : projectTechnologies) {
-            technologiesToDB.add(technologyRepository.findByName(technologyToDB));
+        Set<Technology> projectTechnologies = new HashSet<>();
+        for(String technology: projectUpdateDto.getTechnologiesUsed()){
+            projectTechnologies.add(technologyRepository.findByName(technology));
         }
-        project.setTechnologiesUsed(technologiesToDB);
+        project.setTechnologiesUsed(projectTechnologies);
 
-        Set<String> frameworks = (frameworkRepository.findAll()
-                .stream().map(Framework::getName)
-                .collect(Collectors.toSet()));
-        Set<String> projectFrameworks = frameworks.stream()
-                .distinct()
-                .filter(projectUpdateDto.getFrameworksUsed()::contains)
-                .collect(Collectors.toSet());
-        Set<Framework> frameworksToDB = new HashSet<>();
-        for (String frameworkToDB : projectFrameworks) {
-            frameworksToDB.add(frameworkRepository.findByName(frameworkToDB));
+        Set<Framework> projectFrameworks = new HashSet<>();
+        for(String framework: projectUpdateDto.getFrameworksUsed()){
+            projectFrameworks.add(frameworkRepository.findByName(framework));
         }
-        project.setFrameworksUsed(frameworksToDB);
+        project.setFrameworksUsed(projectFrameworks);
 
         projectRepository.save(project);
     }

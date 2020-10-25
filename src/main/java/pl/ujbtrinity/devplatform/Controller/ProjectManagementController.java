@@ -12,7 +12,6 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -47,11 +46,11 @@ public class ProjectManagementController {
         return new ResponseEntity<>(projectViewDto, HttpStatus.OK);
     }
 
-    @PostMapping(PROJECT_SEARCH_ENDPOINT)
-    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
-        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
-        return new ResponseEntity<>(projectFound, HttpStatus.OK);
-    }
+//    @PostMapping(PROJECT_SEARCH_ENDPOINT)
+//    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
+//        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
+//        return new ResponseEntity<>(projectFound, HttpStatus.OK);
+//    }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
     public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) throws InterruptedException {
