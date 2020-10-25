@@ -12,7 +12,6 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 
 @RestController

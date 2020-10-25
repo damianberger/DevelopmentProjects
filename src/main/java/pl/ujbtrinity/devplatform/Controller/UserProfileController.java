@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -34,7 +35,7 @@ public class UserProfileController {
     }
 
     @PostMapping(USER_EMAIL_CHANGE_ENDPOINT)
-    public String editUserEmail(Principal principal, @RequestBody UserEmailChangeDto userProfileEditDto) {
+    public String editUserEmail(Principal principal,@Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
         userService.editUserEmail(userProfileEditDto, principal.getName());
         return "User email changed";
     }
