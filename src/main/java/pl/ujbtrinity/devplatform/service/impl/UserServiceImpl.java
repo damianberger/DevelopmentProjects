@@ -97,10 +97,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void savePhoto(MultipartFile file, String username) throws IOException {
         User user = userRepository.findByUsername(username);
-        Path path = Paths.get(finalPath + file.getOriginalFilename());
+        Path path = Paths.get(finalPath + user.getId() + "." + file.getContentType().split("/")[1]);
         Files.createFile(path);
         Files.write(path, file.getBytes());
-        user.setPhoto(file.getOriginalFilename());
         userRepository.save(user);
     }
 
