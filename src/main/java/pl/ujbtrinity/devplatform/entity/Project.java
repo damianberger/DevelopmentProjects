@@ -19,8 +19,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String name;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -34,12 +34,12 @@ public class Project {
     @ManyToMany(mappedBy = "projects")
     private Set<User> users;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinTable(name = "projects_technologies", joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "technology_id"))
     private Set<Technology> technologiesUsed;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinTable(name = "projects_frameworks", joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "framework_id"))
     private Set<Framework> frameworksUsed;
