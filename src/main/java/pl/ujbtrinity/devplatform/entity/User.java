@@ -55,9 +55,6 @@ public class User {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "photography")
-    private String photo;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
