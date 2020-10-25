@@ -49,6 +49,15 @@ public class User {
     @Column(name = "updated")
     private LocalDate updated;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "photography")
+    private String photo;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;

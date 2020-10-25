@@ -1,7 +1,9 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.entity.Framework;
 import pl.ujbtrinity.devplatform.entity.Role;
@@ -15,6 +17,10 @@ import pl.ujbtrinity.devplatform.repository.UserRepository;
 import pl.ujbtrinity.devplatform.service.UserService;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,6 +30,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Value("${images.path}")
+    private String finalPath;
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final FrameworkRepository frameworkRepository;
@@ -85,6 +95,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void savePhoto(MultipartFile file, String username) throws IOException {
+        User user = userRepository.findByUsername(username);
+        Path path = Paths.get(finalPath + file.getOriginalFilename());
+        Files.createFile(path);
+        Files.write(path, file.getBytes());
+        user.setPhoto(file.getOriginalFilename());
+        userRepository.save(user);
+    }
+
+    @Override
     public void editUserEmail(UserEmailChangeDto userEmailChangeDto, String username) {
         User user = userRepository.findByUsername(username);
         if (passwordEncoder.matches(userEmailChangeDto.getCurrentPassword(), user.getPassword())) {
@@ -125,6 +145,17 @@ public class UserServiceImpl implements UserService {
             userTechnologies.add(technologyRepository.findByName(technology));
         }
         user.setTechnologies(userTechnologies);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void editUserPersonals(UserProfileChangeDto userProfileChangeDto, String username) {
+        User user = userRepository.findByUsername(username);
+        user.setFirstName(userProfileChangeDto.getFirstName());
+        user.setLastName(userProfileChangeDto.getLastName());
+        user.setUsername(userProfileChangeDto.getUsername());
+        user.setDescription(userProfileChangeDto.getDescription());
+        user.setCity(userProfileChangeDto.getCity());
         userRepository.save(user);
     }
 

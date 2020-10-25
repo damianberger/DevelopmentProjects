@@ -1,11 +1,15 @@
 package pl.ujbtrinity.devplatform.Controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
+
+import java.io.IOException;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -23,6 +27,8 @@ public class UserProfileController {
     private static final String USER_PASSWORD_CHANGE_ENDPOINT = "/user/profile/password/change";
     private static final String USER_FRAMEWORKS_EDITION_ENDPOINT = "/user/profile/frameworks/edit";
     private static final String USER_TECHNOLOGIES_EDITION_ENDPOINT = "/user/profile/technologies/edit";
+    private static final String USER_PERSONALS_CHANGE_ENDPOINT = "/user/personals/edit";
+    private static final String USER_UPLOAD_PHOTOGRAPHY = "/user/photo";
 
 
     @GetMapping(USER_PROFILE_ENDPOINT)
@@ -59,22 +65,15 @@ public class UserProfileController {
         return "User frameworks updated";
     }
 
-    @PostMapping("user/photo/{id}")
-    public String adPhotography(@PathVariable String id) {
-        // adding a user's photo
-        return "user photo/next step";
+    @PostMapping(USER_PERSONALS_CHANGE_ENDPOINT)
+    public String editUserPersonals(Principal principal, @RequestBody UserProfileChangeDto userProfileChangeDto) {
+        userService.editUserPersonals(userProfileChangeDto, principal.getName());
+        return "User personals updated";
     }
 
-    /**
-     * This is an option to think about
-     *
-     creating a new entity containing additional data about the user -
-     for example, an address, something about yourself; or add the appropriate fields to User entity
-     */
-
-    /**
-     * endpoints for editing data
-     */
-
-
+    @PostMapping(value = USER_UPLOAD_PHOTOGRAPHY, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addPhotography(Principal principal, @RequestParam("file") MultipartFile file) throws IOException {
+        userService.savePhoto(file, principal.getName());
+        return new ResponseEntity<>("file uploaded successfully", HttpStatus.OK);
+    }
 }

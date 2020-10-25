@@ -25,6 +25,10 @@ public class UserRegistrationDto {
     @Column(nullable = false)
     private String lastName;
 
+    private String description;
+  
+    private String city;
+
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{8,}")
     private String password;
 
@@ -40,6 +44,8 @@ public class UserRegistrationDto {
     user.setEmail(email);
     user.setFirstName(firstName);
     user.setLastName(lastName);
+    user.setLastName(description);
+    user.setLastName(city);
     user.setPassword(password);
     return user;
     }
