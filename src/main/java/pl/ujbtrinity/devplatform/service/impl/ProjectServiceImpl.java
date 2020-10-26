@@ -14,7 +14,6 @@ import pl.ujbtrinity.devplatform.service.ProjectService;
 
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -70,6 +69,11 @@ public class ProjectServiceImpl implements ProjectService {
 //                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().containsAll(projectSearchRequestedDto.getFrameworks()))
 //                .collect(Collectors.toList());
 //    }
+
+    @Override
+    public List<Project> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
+        return projectRepository.findAllByTechnologiesUsedAndFrameworksUsed(projectSearchRequestedDto.getTechnologies(), projectSearchRequestedDto.getFrameworks());
+    }
 
     @Override
     public ProjectViewDto viewProject(Long id) {

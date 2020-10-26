@@ -12,8 +12,8 @@ public class ProjectSearchRequestedDto {
     private String name;
     private LocalDate createdAfter;
     private LocalDate createdBefore;
-    private Set<String> frameworks;
-    private Set<String> technologies;
+    private String frameworks;
+    private String technologies;
 
 
 

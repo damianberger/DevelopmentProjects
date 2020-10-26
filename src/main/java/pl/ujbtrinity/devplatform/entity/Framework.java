@@ -1,5 +1,6 @@
 package pl.ujbtrinity.devplatform.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

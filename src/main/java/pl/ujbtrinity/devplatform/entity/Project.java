@@ -1,5 +1,6 @@
 package pl.ujbtrinity.devplatform.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,10 +35,12 @@ public class Project {
     @ManyToMany(mappedBy = "projects")
     private Set<User> users;
 
+
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinTable(name = "projects_technologies", joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "technology_id"))
     private Set<Technology> technologiesUsed;
+
 
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinTable(name = "projects_frameworks", joinColumns = @JoinColumn(name = "project_id"),

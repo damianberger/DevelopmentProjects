@@ -46,11 +46,11 @@ public class ProjectManagementController {
         return new ResponseEntity<>(projectViewDto, HttpStatus.OK);
     }
 
-//    @PostMapping(PROJECT_SEARCH_ENDPOINT)
-//    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
-//        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
-//        return new ResponseEntity<>(projectFound, HttpStatus.OK);
-//    }
+    @PostMapping(PROJECT_SEARCH_ENDPOINT)
+    public ResponseEntity<List<Project>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
+        List<Project> projectFound = projectService.projectSearch(projectSearchRequestedDto);
+        return new ResponseEntity<>(projectFound, HttpStatus.OK);
+    }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
     public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) throws InterruptedException {
