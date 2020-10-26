@@ -11,7 +11,7 @@ public interface ProjectService {
     Optional<Project> findById(Long id);
     void createProject(ProjectCreateDto projectCreateDto, String username);
     ProjectViewDto viewProject(Long id);
-    List<Project> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto);
+    List<ProjectViewDto> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto);
     void updateProject (ProjectUpdateDto projectUpdateDto);
     void deleteProject (Long id);
     void removeUsersFromProject(Long id);

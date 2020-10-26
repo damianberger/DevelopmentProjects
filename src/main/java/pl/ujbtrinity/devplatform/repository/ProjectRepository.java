@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import pl.ujbtrinity.devplatform.dto.projectDto.ProjectSearchRequestedDto;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectViewDto;
 import pl.ujbtrinity.devplatform.entity.Project;
 
 import java.util.List;

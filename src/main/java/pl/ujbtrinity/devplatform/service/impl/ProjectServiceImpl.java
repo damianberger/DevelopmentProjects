@@ -71,8 +71,15 @@ public class ProjectServiceImpl implements ProjectService {
 //    }
 
     @Override
-    public List<Project> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
-        return projectRepository.findAllByTechnologiesUsedAndFrameworksUsed(projectSearchRequestedDto.getTechnologies(), projectSearchRequestedDto.getFrameworks());
+    public List<ProjectViewDto> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
+        List<ProjectViewDto> resultList = new ArrayList<>();
+        List<Project> allByTechnologiesUsedAndFrameworksUsed =
+                projectRepository.findAllByTechnologiesUsedAndFrameworksUsed(projectSearchRequestedDto.getTechnologies(),
+                        projectSearchRequestedDto.getFrameworks());
+        for (Project project : allByTechnologiesUsedAndFrameworksUsed) {
+            resultList.add(ProjectViewDto.fromProject(project));
+        }
+        return resultList;
     }
 
     @Override

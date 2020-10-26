@@ -47,8 +47,8 @@ public class ProjectManagementController {
     }
 
     @PostMapping(PROJECT_SEARCH_ENDPOINT)
-    public ResponseEntity<List<Project>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
-        List<Project> projectFound = projectService.projectSearch(projectSearchRequestedDto);
+    public ResponseEntity<List<ProjectViewDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
+        List<ProjectViewDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
         return new ResponseEntity<>(projectFound, HttpStatus.OK);
     }
 
