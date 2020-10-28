@@ -34,7 +34,7 @@ public class UserProfileController {
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
 
 
-    @GetMapping(value = USER_PROFILE_ENDPOINT, produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = USER_PROFILE_ENDPOINT)
     public ResponseEntity<UserProfileDto> readProfile(Principal principal){
         UserProfileDto userProfile = userService.getUserProfile(principal.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
