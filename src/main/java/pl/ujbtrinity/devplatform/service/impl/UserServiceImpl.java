@@ -21,11 +21,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +54,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileDto getUserProfile(String username) {
         return UserProfileDto.fromUser(findByUsername(username));
+    }
+
+    @Override
+    public byte[] getUserProfilePhoto(Long id) throws IOException {
+        Optional<User> user = userRepository.findById(id);
+        Path path = Paths.get(finalPath + id + ".png");
+        return Files.readAllBytes(path);
     }
 
     @Override
@@ -96,11 +101,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void savePhoto(MultipartFile file, String username) throws IOException {
-        User user = userRepository.findByUsername(username);
-        Path path = Paths.get(finalPath + user.getId() + "." + file.getContentType().split("/")[1]);
-        Files.createFile(path);
-        Files.write(path, file.getBytes());
-        userRepository.save(user);
+        if(file.getContentType() == "image/png") {
+            User user = userRepository.findByUsername(username);
+            Path path = Paths.get(finalPath + user.getId() + "." + file.getContentType().split("/")[1]);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            userRepository.save(user);
+        }
     }
 
     @Override

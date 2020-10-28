@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Data
 public class UserProfileDto {
 
+
     private String username;
     private String email;
     private String firstName;
@@ -20,6 +21,7 @@ public class UserProfileDto {
     private String city;
     private Set<String> technologies;
     private Set<String> frameworks;
+    private String photoUrl;
 
     public static UserProfileDto fromUser(User user){
         UserProfileDto userProfileDto = new UserProfileDto();
@@ -35,6 +37,7 @@ public class UserProfileDto {
         userProfileDto.technologies = user.getTechnologies()
                 .stream().map(Technology::getName)
                 .collect(Collectors.toSet());
+        userProfileDto.setPhotoUrl("localhost:8081/user/photo/" + user.getId());
         return userProfileDto;
     }
 
