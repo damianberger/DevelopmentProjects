@@ -1,5 +1,7 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
 import pl.ujbtrinity.devplatform.entity.Framework;
@@ -94,8 +96,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectRepository.save(project);
     }
-
-
 
     @Override
     public void deleteProject(Long id) {

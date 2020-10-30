@@ -14,6 +14,7 @@ public interface UserService {
     byte[] getUserProfilePhoto(Long id) throws IOException;
     void register (UserRegistrationDto userRegistrationDto);
     void setStatus (String userName);
+    String joinProject(String username, Long id);
     void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     void editUserFrameworks (UserFrameworkDto userFrameworkDto, String username);

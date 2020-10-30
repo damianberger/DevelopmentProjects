@@ -13,7 +13,6 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.VerificationTokenServiceImpl;
 
 import javax.mail.MessagingException;
-import java.sql.SQLOutput;
 
 @RestController
 public class RegistrationController {

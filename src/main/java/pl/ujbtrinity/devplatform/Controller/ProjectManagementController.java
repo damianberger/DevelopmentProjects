@@ -12,6 +12,7 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -30,6 +31,7 @@ public class ProjectManagementController {
     private static final String PROJECT_SEARCH_ENDPOINT = "/projects";
     private static final String PROJECT_DELETE_ENDPOINT = "/project/delete/{id}";
     private static final String PROJECT_UPDATE_ENDPOINT = "/project/update";
+    private static final String PROJECT_JOIN_ENDPOINT = "/project/join/{id}";
 
     @PostMapping(PROJECT_CREATION_ENDPOINT)
     public String createNewProject(@RequestBody ProjectCreateDto projectCreateDto, Principal principal) {
@@ -84,4 +86,10 @@ public class ProjectManagementController {
             }
         }
     }
+
+    @GetMapping(PROJECT_JOIN_ENDPOINT)
+     public String joinProject(@PathVariable Long id, Principal principal){
+        return userService.joinProject(principal.getName(), id);
+    }
+
 }
