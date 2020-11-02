@@ -5,15 +5,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
-import pl.ujbtrinity.devplatform.entity.Framework;
-import pl.ujbtrinity.devplatform.entity.Role;
-import pl.ujbtrinity.devplatform.entity.Technology;
-import pl.ujbtrinity.devplatform.entity.User;
+import pl.ujbtrinity.devplatform.entity.*;
 import pl.ujbtrinity.devplatform.model.Status;
-import pl.ujbtrinity.devplatform.repository.FrameworkRepository;
-import pl.ujbtrinity.devplatform.repository.RoleRepository;
-import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
-import pl.ujbtrinity.devplatform.repository.UserRepository;
+import pl.ujbtrinity.devplatform.repository.*;
 import pl.ujbtrinity.devplatform.service.UserService;
 
 
@@ -34,13 +28,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ProjectRepository projectRepository;
     private final FrameworkRepository frameworkRepository;
     private final TechnologyRepository technologyRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ProjectRepository projectRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.projectRepository = projectRepository;
         this.frameworkRepository = frameworkRepository;
         this.technologyRepository = technologyRepository;
         this.passwordEncoder = passwordEncoder;
@@ -101,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void savePhoto(MultipartFile file, String username) throws IOException {
-        if(file.getContentType() == "image/png") {
+        if (file.getContentType() == "image/png") {
             User user = userRepository.findByUsername(username);
             Path path = Paths.get(finalPath + user.getId() + "." + file.getContentType().split("/")[1]);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -146,7 +142,7 @@ public class UserServiceImpl implements UserService {
     public void editUserTechnologies(UserTechnologyDto userTechnologyDto, String username) {
         User user = userRepository.findByUsername(username);
         Set<Technology> userTechnologies = new HashSet<>();
-        for(String technology: userTechnologyDto.getTechnologies()){
+        for (String technology : userTechnologyDto.getTechnologies()) {
             userTechnologies.add(technologyRepository.findByName(technology));
         }
         user.setTechnologies(userTechnologies);
@@ -162,6 +158,43 @@ public class UserServiceImpl implements UserService {
         user.setDescription(userProfileChangeDto.getDescription());
         user.setCity(userProfileChangeDto.getCity());
         userRepository.save(user);
+    }
+
+    @Override
+    public String joinProject(String username, Long id) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        } else {
+            Set<Project> userProjects = user.getProjects();
+            if (userProjects.contains(project.get())) {
+                return "You are already participating in this project";
+            } else {
+                userProjects.add(project.get());
+                userRepository.save(user);
+                return "You are now participating in this project";
+            }
+        }
+
+    }
+
+    @Override
+    public String leaveProject(String username, Long id) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        } else {
+            Set<Project> userProjects = user.getProjects();
+            if (!userProjects.contains(project.get())) {
+                return "You are not participating in selected project";
+            } else {
+                userProjects.remove(project.get());
+                userRepository.save(user);
+                return "You have left selected project";
+            }
+        }
     }
 
     @Override

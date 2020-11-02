@@ -1,5 +1,7 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
 import pl.ujbtrinity.devplatform.entity.Framework;
@@ -54,22 +56,16 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
-//    @Override
-//    public List<ProjectSearchReceivedDto> projectSearch(ProjectSearchRequestedDto projectSearchRequestedDto) {
-//        List<Project> projects = projectRepository.findAll();
-//        List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
-//        for (Project project: projects) {
-//        ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
-//        projectsFound.add(projectReceived);
-//        }
-//        return projectsFound.stream()
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getName().toLowerCase().contains(projectSearchRequestedDto.getName().toLowerCase()))
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isAfter(projectSearchRequestedDto.getCreatedAfter()))
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getCreated().isBefore(projectSearchRequestedDto.getCreatedBefore()))
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getTechnologies().containsAll(projectSearchRequestedDto.getTechnologies()))
-//                .filter(projectSearchReceivedDto -> projectSearchReceivedDto.getFrameworks().containsAll(projectSearchRequestedDto.getFrameworks()))
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public List<ProjectSearchReceivedDto> projectSearch() {
+        List<Project> projects = projectRepository.findAll();
+        List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
+        for (Project project: projects) {
+        ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
+        projectsFound.add(projectReceived);
+        }
+        return projectsFound;
+    }
 
     @Override
     public ProjectViewDto viewProject(Long id) {
@@ -94,8 +90,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectRepository.save(project);
     }
-
-
 
     @Override
     public void deleteProject(Long id) {

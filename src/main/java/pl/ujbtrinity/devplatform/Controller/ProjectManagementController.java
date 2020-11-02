@@ -12,8 +12,9 @@ import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ProjectManagementController {
 
@@ -30,6 +31,9 @@ public class ProjectManagementController {
     private static final String PROJECT_SEARCH_ENDPOINT = "/projects";
     private static final String PROJECT_DELETE_ENDPOINT = "/project/delete/{id}";
     private static final String PROJECT_UPDATE_ENDPOINT = "/project/update";
+    private static final String PROJECT_JOIN_ENDPOINT = "/project/join/{id}";
+    private static final String PROJECT_LEAVE_ENDPOINT = "/project/leave/{id}";
+
 
     @PostMapping(PROJECT_CREATION_ENDPOINT)
     public String createNewProject(@RequestBody ProjectCreateDto projectCreateDto, Principal principal) {
@@ -46,11 +50,11 @@ public class ProjectManagementController {
         return new ResponseEntity<>(projectViewDto, HttpStatus.OK);
     }
 
-//    @PostMapping(PROJECT_SEARCH_ENDPOINT)
-//    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
-//        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
-//        return new ResponseEntity<>(projectFound, HttpStatus.OK);
-//    }
+    @GetMapping(PROJECT_SEARCH_ENDPOINT)
+    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects() {
+        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch();
+        return new ResponseEntity<>(projectFound, HttpStatus.OK);
+    }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
     public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) throws InterruptedException {
@@ -83,5 +87,15 @@ public class ProjectManagementController {
                 return new ResponseEntity<>("Access denied", HttpStatus.BAD_REQUEST);
             }
         }
+    }
+
+    @GetMapping(PROJECT_JOIN_ENDPOINT)
+     public String joinProject(@PathVariable Long id, Principal principal){
+        return userService.joinProject(principal.getName(), id);
+    }
+
+    @GetMapping(PROJECT_LEAVE_ENDPOINT)
+    public String leaveProject(@PathVariable Long id, Principal principal){
+        return userService.leaveProject(principal.getName(), id);
     }
 }
