@@ -168,6 +168,9 @@ public class UserServiceImpl implements UserService {
             return "Project doesn't exist";
         }else {
             Set<Project> userProjects = user.getProjects();
+            if(userProjects.contains(project.get())){
+                return "You are already participating in this project";
+            }
             userProjects.add(project.get());
             userRepository.save(user);
             return "You are now participating in this project";

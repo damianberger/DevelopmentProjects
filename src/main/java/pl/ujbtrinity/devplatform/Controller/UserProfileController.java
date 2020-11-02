@@ -33,12 +33,12 @@ public class UserProfileController {
     private static final String USER_UPLOAD_PHOTOGRAPHY_ENDPOINT = "/user/photo/upload";
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
 
-
     @GetMapping(value = USER_PROFILE_ENDPOINT)
     public ResponseEntity<UserProfileDto> readProfile(Principal principal){
         UserProfileDto userProfile = userService.getUserProfile(principal.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
+
 
     @GetMapping(value = USER_PROFILE_PHOTOGRAPHY_ENDPOINT)
     public ResponseEntity<byte[]> getProfilePhoto(@PathVariable Long id) throws IOException {

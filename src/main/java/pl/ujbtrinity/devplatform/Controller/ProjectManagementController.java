@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ProjectManagementController {
 
@@ -48,11 +48,11 @@ public class ProjectManagementController {
         return new ResponseEntity<>(projectViewDto, HttpStatus.OK);
     }
 
-//    @PostMapping(PROJECT_SEARCH_ENDPOINT)
-//    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects(@RequestBody ProjectSearchRequestedDto projectSearchRequestedDto) {
-//        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch(projectSearchRequestedDto);
-//        return new ResponseEntity<>(projectFound, HttpStatus.OK);
-//    }
+    @GetMapping(PROJECT_SEARCH_ENDPOINT)
+    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects() {
+        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch();
+        return new ResponseEntity<>(projectFound, HttpStatus.OK);
+    }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
     public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) throws InterruptedException {
