@@ -15,6 +15,7 @@ public interface UserService {
     void register (UserRegistrationDto userRegistrationDto);
     void setStatus (String userName);
     String joinProject(String username, Long id);
+    String leaveProject(String username, Long id);
     void editUserEmail (UserEmailChangeDto userProfileEditDto, String username);
     void editUserPassword (PasswordChangeDto passwordChangeDto, String username);
     void editUserFrameworks (UserFrameworkDto userFrameworkDto, String username);

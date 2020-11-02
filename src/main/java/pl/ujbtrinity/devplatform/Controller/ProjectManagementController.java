@@ -32,6 +32,8 @@ public class ProjectManagementController {
     private static final String PROJECT_DELETE_ENDPOINT = "/project/delete/{id}";
     private static final String PROJECT_UPDATE_ENDPOINT = "/project/update";
     private static final String PROJECT_JOIN_ENDPOINT = "/project/join/{id}";
+    private static final String PROJECT_LEAVE_ENDPOINT = "/project/leave/{id}";
+
 
     @PostMapping(PROJECT_CREATION_ENDPOINT)
     public String createNewProject(@RequestBody ProjectCreateDto projectCreateDto, Principal principal) {
@@ -92,4 +94,8 @@ public class ProjectManagementController {
         return userService.joinProject(principal.getName(), id);
     }
 
+    @GetMapping(PROJECT_LEAVE_ENDPOINT)
+    public String leaveProject(@PathVariable Long id, Principal principal){
+        return userService.leaveProject(principal.getName(), id);
+    }
 }

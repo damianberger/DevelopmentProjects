@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void savePhoto(MultipartFile file, String username) throws IOException {
-        if(file.getContentType() == "image/png") {
+        if (file.getContentType() == "image/png") {
             User user = userRepository.findByUsername(username);
             Path path = Paths.get(finalPath + user.getId() + "." + file.getContentType().split("/")[1]);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
     public void editUserTechnologies(UserTechnologyDto userTechnologyDto, String username) {
         User user = userRepository.findByUsername(username);
         Set<Technology> userTechnologies = new HashSet<>();
-        for(String technology: userTechnologyDto.getTechnologies()){
+        for (String technology : userTechnologyDto.getTechnologies()) {
             userTechnologies.add(technologyRepository.findByName(technology));
         }
         user.setTechnologies(userTechnologies);
@@ -164,16 +164,36 @@ public class UserServiceImpl implements UserService {
     public String joinProject(String username, Long id) {
         User user = userRepository.findByUsername(username);
         Optional<Project> project = projectRepository.findById(id);
-        if(!project.isPresent()){
+        if (!project.isPresent()) {
             return "Project doesn't exist";
-        }else {
+        } else {
             Set<Project> userProjects = user.getProjects();
-            if(userProjects.contains(project.get())){
+            if (userProjects.contains(project.get())) {
                 return "You are already participating in this project";
+            } else {
+                userProjects.add(project.get());
+                userRepository.save(user);
+                return "You are now participating in this project";
             }
-            userProjects.add(project.get());
-            userRepository.save(user);
-            return "You are now participating in this project";
+        }
+
+    }
+
+    @Override
+    public String leaveProject(String username, Long id) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        } else {
+            Set<Project> userProjects = user.getProjects();
+            if (!userProjects.contains(project.get())) {
+                return "You are not participating in selected project";
+            } else {
+                userProjects.remove(project.get());
+                userRepository.save(user);
+                return "You have left selected project";
+            }
         }
     }
 
