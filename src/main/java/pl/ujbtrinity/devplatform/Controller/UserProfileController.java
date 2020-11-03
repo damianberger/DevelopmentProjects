@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
+import pl.ujbtrinity.devplatform.service.impl.ProjectServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.io.IOException;
@@ -19,9 +20,11 @@ import java.security.Principal;
 public class UserProfileController {
 
     private final UserServiceImpl userService;
+    private final ProjectServiceImpl projectService;
 
-    public UserProfileController(UserServiceImpl userService) {
+    public UserProfileController(UserServiceImpl userService, ProjectServiceImpl projectService) {
         this.userService = userService;
+        this.projectService = projectService;
     }
 
     private static final String USER_PROFILE_ENDPOINT = "/user/profile";
@@ -32,9 +35,16 @@ public class UserProfileController {
     private static final String USER_PERSONALS_CHANGE_ENDPOINT = "/user/personals/edit";
     private static final String USER_UPLOAD_PHOTOGRAPHY_ENDPOINT = "/user/photo/upload";
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
-    private static final String USER_PROJECT_INVITATIONS_ENDPOINT = "/user/project/invitations";
-    private static final String USER_PROJECT_INVITATION_ACCEPT_ENDPOINT = "/user/project/accept/{id}";
-    private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
+    private static final String USER_LEAVE_PROJECT_ENDPOINT = "/user/project/leave/{id}";
+
+
+    @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
+    public String leaveProject(Principal principal, @PathVariable Long id){
+        return projectService.leaveProject(principal.getName(), id);
+    }
+
+
+
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
     public ResponseEntity<UserProfileDto> readProfile(Principal principal){

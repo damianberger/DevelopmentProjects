@@ -1,6 +1,5 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
 import pl.ujbtrinity.devplatform.entity.*;
@@ -153,6 +152,10 @@ public class ProjectServiceImpl implements ProjectService {
             return "Project by this ID doesn't exist";
         }
         if(project.get().getCreator().equals(invitingUser) || project.get().getUsers().contains(invitingUser)){
+            ProjectInvitation duplicateCheck = projectInvitationRepository.findByUserAndProject(userId,projectId);
+            if(duplicateCheck != null){
+                return "This user has already been invited to this project";
+            }
             ProjectInvitation invite = new ProjectInvitation();
             invite.setInvitingUser(invitingUser);
             invite.setInvitedUser(invitedUser.get());
@@ -184,8 +187,11 @@ public class ProjectServiceImpl implements ProjectService {
             invitationDto.setInvitationDateTime(invitation.getCreated());
             invitationDto.setInvitingUser(invitation.getInvitingUser().getUsername());
             invitationDto.setInvitedUser(invitation.getInvitedUser().getUsername());
+            invitationDto.setProjectName(invitation.getProject().getName());
             invitationDtos.add(invitationDto);
         }
         return invitationDtos;
     }
+
+
 }

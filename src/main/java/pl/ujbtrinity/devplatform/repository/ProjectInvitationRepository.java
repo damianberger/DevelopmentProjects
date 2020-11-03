@@ -17,14 +17,15 @@ public interface ProjectInvitationRepository extends JpaRepository<ProjectInvita
     @Query(value = "delete from project_invitation b where b.project_id= ?1", nativeQuery = true)
     void removeProjectInvitationsByProject(Long id);
 
-    @Modifying
     @Transactional
     @Query(value = "select * from project_invitation b where b.project_id= ?1", nativeQuery = true)
     Set<ProjectInvitation> findByProject(Long id);
 
-    @Modifying
     @Transactional
     @Query(value = "select * from project_invitation b where b.invited_user_id= ?1", nativeQuery = true)
     Set<ProjectInvitation> findByUser(Long id);
+
+    @Query(value = "select * from project_invitation b where b.invited_user_id=?1 and b.project_id=?2", nativeQuery = true)
+    ProjectInvitation findByUserAndProject(Long userId, Long projectId);
 
 }

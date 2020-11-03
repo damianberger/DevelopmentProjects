@@ -37,6 +37,7 @@ public class ProjectManagementController {
 
 
 
+
     @PostMapping(PROJECT_CREATION_ENDPOINT)
     public String createNewProject(@RequestBody ProjectCreateDto projectCreateDto, Principal principal) {
         projectService.createProject(projectCreateDto, principal.getName());

@@ -12,4 +12,5 @@ public class ProjectInvitationDto {
     private String invitingUser;
     private String invitedUser;
     private LocalDateTime invitationDateTime;
+    private String projectName;
 }
