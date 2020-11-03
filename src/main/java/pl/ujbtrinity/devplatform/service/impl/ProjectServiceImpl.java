@@ -97,6 +97,43 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public String joinProject(String username, Long id) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        } else {
+            Set<User> projectUsers = project.get().getUsers();
+            if (projectUsers.contains(user)) {
+                return "You are already participating in this project";
+            } else {
+                projectUsers.add(user);
+                projectRepository.save(project.get());
+                return "You are now participating in this project";
+            }
+        }
+
+    }
+
+    @Override
+    public String leaveProject(String username, Long id) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        } else {
+            Set<User> projectUsers = project.get().getUsers();
+            if (!projectUsers.contains(user)) {
+                return "You are not participating in selected project";
+            } else {
+                projectUsers.remove(user);
+                projectRepository.save(project.get());
+                return "You have left selected project";
+            }
+        }
+    }
+
+    @Override
     public void removeUsersFromProject(Long id) {
         userRepository.removeUsersFromProject(id);
     }

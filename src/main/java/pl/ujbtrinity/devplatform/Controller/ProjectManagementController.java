@@ -91,11 +91,11 @@ public class ProjectManagementController {
 
     @GetMapping(PROJECT_JOIN_ENDPOINT)
      public String joinProject(@PathVariable Long id, Principal principal){
-        return userService.joinProject(principal.getName(), id);
+        return projectService.joinProject(principal.getName(), id);
     }
 
     @GetMapping(PROJECT_LEAVE_ENDPOINT)
     public String leaveProject(@PathVariable Long id, Principal principal){
-        return userService.leaveProject(principal.getName(), id);
+        return projectService.leaveProject(principal.getName(), id);
     }
 }
