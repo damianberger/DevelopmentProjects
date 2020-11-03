@@ -19,4 +19,5 @@ public interface ProjectService {
     String leaveProject(String username, Long id);
     String inviteUser(String username, Long userId, Long projectId);
     Set<ProjectInvitationDto> projectInvitations(Long id, String username);
+    Set<ProjectInvitationDto> userProjectInvitations(String username);
 }

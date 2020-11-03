@@ -180,6 +180,16 @@ public class ProjectServiceImpl implements ProjectService {
             return null;
         }
         Set<ProjectInvitation> invitations = projectInvitationRepository.findByProject(id);
+        return getProjectInvitationDtos(invitations);
+    }
+
+    @Override
+    public Set<ProjectInvitationDto> userProjectInvitations(String username) {
+        Set<ProjectInvitation> invitations = projectInvitationRepository.findByUser(userRepository.findByUsername(username).getId());
+        return getProjectInvitationDtos(invitations);
+    }
+
+    private Set<ProjectInvitationDto> getProjectInvitationDtos(Set<ProjectInvitation> invitations) {
         Set<ProjectInvitationDto> invitationDtos = new HashSet<>();
         for (ProjectInvitation invitation: invitations) {
             ProjectInvitationDto invitationDto = new ProjectInvitationDto();
@@ -192,6 +202,4 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return invitationDtos;
     }
-
-
 }

@@ -5,16 +5,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectInvitationDto;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.service.impl.ProjectServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import javax.validation.Valid;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.security.Principal;
+import java.util.Set;
 
 @RestController
 public class UserProfileController {
@@ -36,13 +36,7 @@ public class UserProfileController {
     private static final String USER_UPLOAD_PHOTOGRAPHY_ENDPOINT = "/user/photo/upload";
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
     private static final String USER_LEAVE_PROJECT_ENDPOINT = "/user/project/leave/{id}";
-
-
-    @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
-    public String leaveProject(Principal principal, @PathVariable Long id){
-        return projectService.leaveProject(principal.getName(), id);
-    }
-
+    private static final String USER_PROJECT_INVITATIONS_ENDPOINT = "/user/project/invitations";
 
 
 
@@ -97,5 +91,15 @@ public class UserProfileController {
     public ResponseEntity<Object> addPhotography(Principal principal, @RequestParam("file") MultipartFile file) throws IOException {
         userService.savePhoto(file, principal.getName());
         return new ResponseEntity<>("file uploaded successfully", HttpStatus.OK);
+    }
+
+    @GetMapping(USER_PROJECT_INVITATIONS_ENDPOINT)
+    public ResponseEntity<Set<ProjectInvitationDto>> userProjectInvitations(Principal principal){
+        return new ResponseEntity<>(projectService.userProjectInvitations(principal.getName()), HttpStatus.FOUND);
+    }
+
+    @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
+    public String leaveProject(Principal principal, @PathVariable Long id){
+        return projectService.leaveProject(principal.getName(), id);
     }
 }
