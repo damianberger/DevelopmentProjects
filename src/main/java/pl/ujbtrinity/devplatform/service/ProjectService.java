@@ -14,5 +14,7 @@ public interface ProjectService {
     List<ProjectSearchReceivedDto> projectSearch();
     void updateProject (ProjectUpdateDto projectUpdateDto);
     void deleteProject (Long id);
+    String joinProject(String username, Long id);
+    String leaveProject(String username, Long id);
     void removeUsersFromProject(Long id);
 }

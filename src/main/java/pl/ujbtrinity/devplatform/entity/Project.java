@@ -31,7 +31,9 @@ public class Project {
     @ManyToOne
     private User creator;
 
-    @ManyToMany(mappedBy = "projects")
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
