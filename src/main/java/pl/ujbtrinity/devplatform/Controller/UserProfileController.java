@@ -32,6 +32,9 @@ public class UserProfileController {
     private static final String USER_PERSONALS_CHANGE_ENDPOINT = "/user/personals/edit";
     private static final String USER_UPLOAD_PHOTOGRAPHY_ENDPOINT = "/user/photo/upload";
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
+    private static final String USER_PROJECT_INVITATIONS_ENDPOINT = "/user/project/invitations";
+    private static final String USER_PROJECT_INVITATION_ACCEPT_ENDPOINT = "/user/project/accept/{id}";
+    private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
     public ResponseEntity<UserProfileDto> readProfile(Principal principal){

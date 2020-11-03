@@ -4,19 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
-import pl.ujbtrinity.devplatform.entity.Framework;
-import pl.ujbtrinity.devplatform.entity.Project;
-import pl.ujbtrinity.devplatform.entity.Technology;
-import pl.ujbtrinity.devplatform.entity.User;
-import pl.ujbtrinity.devplatform.repository.FrameworkRepository;
-import pl.ujbtrinity.devplatform.repository.ProjectRepository;
-import pl.ujbtrinity.devplatform.repository.TechnologyRepository;
-import pl.ujbtrinity.devplatform.repository.UserRepository;
+import pl.ujbtrinity.devplatform.entity.*;
+import pl.ujbtrinity.devplatform.model.InvitationStatus;
+import pl.ujbtrinity.devplatform.repository.*;
 import pl.ujbtrinity.devplatform.service.ProjectService;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -25,12 +21,14 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
     private final FrameworkRepository frameworkRepository;
     private final TechnologyRepository technologyRepository;
+    private final ProjectInvitationRepository projectInvitationRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, ProjectInvitationRepository projectInvitationRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.frameworkRepository = frameworkRepository;
         this.technologyRepository = technologyRepository;
+        this.projectInvitationRepository = projectInvitationRepository;
     }
 
     @Override
@@ -94,6 +92,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
+        projectInvitationRepository.removeProjectInvitationsByProject(id);
     }
 
     @Override
@@ -131,6 +130,30 @@ public class ProjectServiceImpl implements ProjectService {
                 return "You have left selected project";
             }
         }
+    }
+
+    @Override
+    public String inviteUser(String username, Long userId, Long projectId) {
+        User invitingUser = userRepository.findByUsername(username);
+        Optional<User> invitedUser = userRepository.findById(userId);
+        if(!invitedUser.isPresent()) {
+            return "User by this ID doesn't exist";
+        }
+        Optional<Project> project = projectRepository.findById(projectId);
+        if(!project.isPresent()){
+            return "Project by this ID doesn't exist";
+        }
+        if(!invitingUser.equals(project.get().getCreator())){
+            return "You are not an owner of selected project";
+        }
+        ProjectInvitation invite = new ProjectInvitation();
+        invite.setInvitingUser(invitingUser);
+        invite.setInvitedUser(invitedUser.get());
+        invite.setProject(project.get());
+        invite.setStatus(InvitationStatus.ACTIVE);
+        invite.setCreated(LocalDateTime.now());
+        projectInvitationRepository.save(invite);
+        return "Invitation pending";
     }
 
     @Override

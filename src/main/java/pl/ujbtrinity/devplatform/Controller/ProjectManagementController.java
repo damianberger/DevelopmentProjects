@@ -33,6 +33,9 @@ public class ProjectManagementController {
     private static final String PROJECT_UPDATE_ENDPOINT = "/project/update";
     private static final String PROJECT_JOIN_ENDPOINT = "/project/join/{id}";
     private static final String PROJECT_LEAVE_ENDPOINT = "/project/leave/{id}";
+    private static final String PROJECT_INVITE_ENDPOINT = "/project/invite/user={userId}&project={projectId}";
+    private static final String PROJECT_PENDING_INVITATIONS_ENDPOINT = "/project/invitations/{id}";
+
 
 
     @PostMapping(PROJECT_CREATION_ENDPOINT)
@@ -98,4 +101,11 @@ public class ProjectManagementController {
     public String leaveProject(@PathVariable Long id, Principal principal){
         return projectService.leaveProject(principal.getName(), id);
     }
+
+    @PostMapping(PROJECT_INVITE_ENDPOINT)
+    public String inviteUser(Principal principal, @PathVariable Long userId, @PathVariable Long projectId){
+        return projectService.inviteUser(principal.getName(),userId,projectId);
+    }
+
+
 }
