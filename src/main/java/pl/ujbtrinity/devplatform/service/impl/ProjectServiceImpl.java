@@ -3,7 +3,6 @@ package pl.ujbtrinity.devplatform.service.impl;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
 import pl.ujbtrinity.devplatform.entity.*;
-import pl.ujbtrinity.devplatform.model.InvitationStatus;
 import pl.ujbtrinity.devplatform.repository.*;
 import pl.ujbtrinity.devplatform.service.ProjectService;
 
@@ -40,12 +39,12 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectCreateDto.toProject();
         project.setCreator(user);
         Set<Technology> projectTechnologies = new HashSet<>();
-        for(String technology: projectCreateDto.getTechnologies()){
+        for (String technology : projectCreateDto.getTechnologies()) {
             projectTechnologies.add(technologyRepository.findByName(technology));
         }
         project.setTechnologiesUsed(projectTechnologies);
         Set<Framework> projectFrameworks = new HashSet<>();
-        for(String framework: projectCreateDto.getFrameworks()){
+        for (String framework : projectCreateDto.getFrameworks()) {
             projectFrameworks.add(frameworkRepository.findByName(framework));
         }
         project.setFrameworksUsed(projectFrameworks);
@@ -56,9 +55,9 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectSearchReceivedDto> projectSearch() {
         List<Project> projects = projectRepository.findAll();
         List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
-        for (Project project: projects) {
-        ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
-        projectsFound.add(projectReceived);
+        for (Project project : projects) {
+            ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
+            projectsFound.add(projectReceived);
         }
         return projectsFound;
     }
@@ -73,13 +72,13 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.getOne(projectUpdateDto.getId());
         project.setDescription(projectUpdateDto.getDescription());
         Set<Technology> projectTechnologies = new HashSet<>();
-        for(String technology: projectUpdateDto.getTechnologiesUsed()){
+        for (String technology : projectUpdateDto.getTechnologiesUsed()) {
             projectTechnologies.add(technologyRepository.findByName(technology));
         }
         project.setTechnologiesUsed(projectTechnologies);
 
         Set<Framework> projectFrameworks = new HashSet<>();
-        for(String framework: projectUpdateDto.getFrameworksUsed()){
+        for (String framework : projectUpdateDto.getFrameworksUsed()) {
             projectFrameworks.add(frameworkRepository.findByName(framework));
         }
         project.setFrameworksUsed(projectFrameworks);
@@ -91,10 +90,10 @@ public class ProjectServiceImpl implements ProjectService {
     public String deleteProject(String username, Long id) {
         User projectOwner = userRepository.findByUsername(username);
         Optional<Project> project = projectRepository.findById(id);
-        if(!project.isPresent()){
+        if (!project.isPresent()) {
             return "Project doesn't exist";
         }
-        if(!project.get().getCreator().equals(projectOwner)){
+        if (!project.get().getCreator().equals(projectOwner)) {
             return "You are not an owner of this project";
         }
         projectRepository.removeUsersFromProject(id);
@@ -144,23 +143,22 @@ public class ProjectServiceImpl implements ProjectService {
     public String inviteUser(String username, Long userId, Long projectId) {
         User invitingUser = userRepository.findByUsername(username);
         Optional<User> invitedUser = userRepository.findById(userId);
-        if(!invitedUser.isPresent()) {
+        if (!invitedUser.isPresent()) {
             return "User by this ID doesn't exist";
         }
         Optional<Project> project = projectRepository.findById(projectId);
-        if(!project.isPresent()){
+        if (!project.isPresent()) {
             return "Project by this ID doesn't exist";
         }
-        if(project.get().getCreator().equals(invitingUser) || project.get().getUsers().contains(invitingUser)){
-            ProjectInvitation duplicateCheck = projectInvitationRepository.findByUserAndProject(userId,projectId);
-            if(duplicateCheck != null){
+        if (project.get().getCreator().equals(invitingUser) || project.get().getUsers().contains(invitingUser)) {
+            ProjectInvitation duplicateCheck = projectInvitationRepository.findByUserAndProject(userId, projectId);
+            if (duplicateCheck != null) {
                 return "This user has already been invited to this project";
             }
             ProjectInvitation invite = new ProjectInvitation();
             invite.setInvitingUser(invitingUser);
             invite.setInvitedUser(invitedUser.get());
             invite.setProject(project.get());
-            invite.setStatus(InvitationStatus.ACTIVE);
             invite.setCreated(LocalDateTime.now());
             projectInvitationRepository.save(invite);
             return "Invitation pending";
@@ -172,11 +170,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Set<ProjectInvitationDto> projectInvitations(Long id, String username) {
         Optional<Project> project = projectRepository.findById(id);
-        if(!project.isPresent()){
+        if (!project.isPresent()) {
             return null;
         }
         User projectOwner = userRepository.findByUsername(username);
-        if(!project.get().getCreator().equals(projectOwner)){
+        if (!project.get().getCreator().equals(projectOwner)) {
             return null;
         }
         Set<ProjectInvitation> invitations = projectInvitationRepository.findByProject(id);
@@ -191,7 +189,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private Set<ProjectInvitationDto> getProjectInvitationDtos(Set<ProjectInvitation> invitations) {
         Set<ProjectInvitationDto> invitationDtos = new HashSet<>();
-        for (ProjectInvitation invitation: invitations) {
+        for (ProjectInvitation invitation : invitations) {
             ProjectInvitationDto invitationDto = new ProjectInvitationDto();
             invitationDto.setInvitationId(invitation.getId());
             invitationDto.setInvitationDateTime(invitation.getCreated());
@@ -201,5 +199,41 @@ public class ProjectServiceImpl implements ProjectService {
             invitationDtos.add(invitationDto);
         }
         return invitationDtos;
+    }
+
+    @Override
+    public String acceptProjectInvitation(String username, Long projectId) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(projectId);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        }
+        ProjectInvitation invitationCheck = projectInvitationRepository.findByUserAndProject(user.getId(), projectId);
+        if (invitationCheck == null) {
+            return "You have not been invited to this project";
+        } else {
+            projectInvitationRepository.deleteById(invitationCheck.getId());
+            Set<User> projectParticipants = project.get().getUsers();
+            projectParticipants.add(user);
+            project.get().setUsers(projectParticipants);
+            projectRepository.save(project.get());
+            return "You have successfully joined this project";
+        }
+    }
+
+    @Override
+    public String declineProjectInvitation(String username, Long projectId) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(projectId);
+        if (!project.isPresent()) {
+            return "Project doesn't exist";
+        }
+        ProjectInvitation invitationCheck = projectInvitationRepository.findByUserAndProject(user.getId(), projectId);
+        if (invitationCheck == null) {
+            return "You have not been invited to this project";
+        }else {
+            projectInvitationRepository.deleteById(invitationCheck.getId());
+            return "You have declined participating in this project";
+        }
     }
 }

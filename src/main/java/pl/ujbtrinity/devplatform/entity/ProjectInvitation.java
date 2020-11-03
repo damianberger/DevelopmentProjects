@@ -1,7 +1,6 @@
 package pl.ujbtrinity.devplatform.entity;
 
 import lombok.Data;
-import pl.ujbtrinity.devplatform.model.InvitationStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,8 +23,4 @@ public class ProjectInvitation {
     private Project project;
 
     private LocalDateTime created;
-
-    @Enumerated(EnumType.STRING)
-    private InvitationStatus status;
-
 }

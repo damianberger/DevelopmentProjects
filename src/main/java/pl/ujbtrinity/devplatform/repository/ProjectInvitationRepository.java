@@ -12,6 +12,8 @@ import java.util.Set;
 @Repository
 public interface ProjectInvitationRepository extends JpaRepository<ProjectInvitation, Long> {
 
+    void deleteById(Long id);
+
     @Modifying
     @Transactional
     @Query(value = "delete from project_invitation b where b.project_id= ?1", nativeQuery = true)

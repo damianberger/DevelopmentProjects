@@ -16,6 +16,8 @@ public interface ProjectService {
     void updateProject (ProjectUpdateDto projectUpdateDto);
     String deleteProject (String username, Long id);
     String joinProject(String username, Long id);
+    String acceptProjectInvitation(String username, Long id);
+    String declineProjectInvitation(String username, Long id);
     String leaveProject(String username, Long id);
     String inviteUser(String username, Long userId, Long projectId);
     Set<ProjectInvitationDto> projectInvitations(Long id, String username);

@@ -37,11 +37,23 @@ public class UserProfileController {
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
     private static final String USER_LEAVE_PROJECT_ENDPOINT = "/user/project/leave/{id}";
     private static final String USER_PROJECT_INVITATIONS_ENDPOINT = "/user/project/invitations";
+    private static final String USER_PROJECT_INVITATION_ACCEPT_ENDPOINT = "/user/project/accept/{id}";
+    private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
 
+    @GetMapping(USER_PROJECT_INVITATION_ACCEPT_ENDPOINT)
+    public String acceptProjectInvitation(Principal principal,@PathVariable Long id) {
+        return projectService.acceptProjectInvitation(principal.getName(), id);
+    }
+
+
+    @GetMapping(USER_PROJECT_INVITATION_DECLINE_ENDPOINT)
+    public String declineProjectInvitation(Principal principal,@PathVariable Long id) {
+        return projectService.declineProjectInvitation(principal.getName(), id);
+    }
 
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
-    public ResponseEntity<UserProfileDto> readProfile(Principal principal){
+    public ResponseEntity<UserProfileDto> readProfile(Principal principal) {
         UserProfileDto userProfile = userService.getUserProfile(principal.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
@@ -57,14 +69,14 @@ public class UserProfileController {
 
 
     @PostMapping(USER_EMAIL_CHANGE_ENDPOINT)
-    public String editUserEmail(Principal principal,@Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
+    public String editUserEmail(Principal principal, @Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
         userService.editUserEmail(userProfileEditDto, principal.getName());
         return "User email changed";
     }
 
     @PostMapping(USER_PASSWORD_CHANGE_ENDPOINT)
     public String editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
-        userService.editUserPassword(passwordChangeDto,principal.getName());
+        userService.editUserPassword(passwordChangeDto, principal.getName());
         return "User password changed";
     }
 
@@ -94,12 +106,12 @@ public class UserProfileController {
     }
 
     @GetMapping(USER_PROJECT_INVITATIONS_ENDPOINT)
-    public ResponseEntity<Set<ProjectInvitationDto>> userProjectInvitations(Principal principal){
+    public ResponseEntity<Set<ProjectInvitationDto>> userProjectInvitations(Principal principal) {
         return new ResponseEntity<>(projectService.userProjectInvitations(principal.getName()), HttpStatus.FOUND);
     }
 
     @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
-    public String leaveProject(Principal principal, @PathVariable Long id){
+    public String leaveProject(Principal principal, @PathVariable Long id) {
         return projectService.leaveProject(principal.getName(), id);
     }
 }
