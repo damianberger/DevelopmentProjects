@@ -6,6 +6,7 @@ import pl.ujbtrinity.devplatform.entity.Project;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ProjectService {
     Optional<Project> findById(Long id);
@@ -13,8 +14,12 @@ public interface ProjectService {
     ProjectViewDto viewProject(Long id);
     List<ProjectSearchReceivedDto> projectSearch();
     void updateProject (ProjectUpdateDto projectUpdateDto);
-    void deleteProject (Long id);
+    String deleteProject (String username, Long id);
     String joinProject(String username, Long id);
+    String acceptProjectInvitation(String username, Long id);
+    String declineProjectInvitation(String username, Long id);
     String leaveProject(String username, Long id);
-    void removeUsersFromProject(Long id);
+    String inviteUser(String username, Long userId, Long projectId);
+    Set<ProjectInvitationDto> projectInvitations(Long id, String username);
+    Set<ProjectInvitationDto> userProjectInvitations(String username);
 }

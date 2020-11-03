@@ -32,7 +32,7 @@ public class Project {
     private User creator;
 
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
-    @JoinTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"),
+    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 

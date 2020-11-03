@@ -5,23 +5,26 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pl.ujbtrinity.devplatform.dto.projectDto.ProjectInvitationDto;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
+import pl.ujbtrinity.devplatform.service.impl.ProjectServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import javax.validation.Valid;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.security.Principal;
+import java.util.Set;
 
 @RestController
 public class UserProfileController {
 
     private final UserServiceImpl userService;
+    private final ProjectServiceImpl projectService;
 
-    public UserProfileController(UserServiceImpl userService) {
+    public UserProfileController(UserServiceImpl userService, ProjectServiceImpl projectService) {
         this.userService = userService;
+        this.projectService = projectService;
     }
 
     private static final String USER_PROFILE_ENDPOINT = "/user/profile";
@@ -32,9 +35,25 @@ public class UserProfileController {
     private static final String USER_PERSONALS_CHANGE_ENDPOINT = "/user/personals/edit";
     private static final String USER_UPLOAD_PHOTOGRAPHY_ENDPOINT = "/user/photo/upload";
     private static final String USER_PROFILE_PHOTOGRAPHY_ENDPOINT = "/user/photo/{id}";
+    private static final String USER_LEAVE_PROJECT_ENDPOINT = "/user/project/leave/{id}";
+    private static final String USER_PROJECT_INVITATIONS_ENDPOINT = "/user/project/invitations";
+    private static final String USER_PROJECT_INVITATION_ACCEPT_ENDPOINT = "/user/project/accept/{id}";
+    private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
+
+    @GetMapping(USER_PROJECT_INVITATION_ACCEPT_ENDPOINT)
+    public String acceptProjectInvitation(Principal principal,@PathVariable Long id) {
+        return projectService.acceptProjectInvitation(principal.getName(), id);
+    }
+
+
+    @GetMapping(USER_PROJECT_INVITATION_DECLINE_ENDPOINT)
+    public String declineProjectInvitation(Principal principal,@PathVariable Long id) {
+        return projectService.declineProjectInvitation(principal.getName(), id);
+    }
+
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
-    public ResponseEntity<UserProfileDto> readProfile(Principal principal){
+    public ResponseEntity<UserProfileDto> readProfile(Principal principal) {
         UserProfileDto userProfile = userService.getUserProfile(principal.getName());
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
@@ -50,14 +69,14 @@ public class UserProfileController {
 
 
     @PostMapping(USER_EMAIL_CHANGE_ENDPOINT)
-    public String editUserEmail(Principal principal,@Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
+    public String editUserEmail(Principal principal, @Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
         userService.editUserEmail(userProfileEditDto, principal.getName());
         return "User email changed";
     }
 
     @PostMapping(USER_PASSWORD_CHANGE_ENDPOINT)
     public String editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
-        userService.editUserPassword(passwordChangeDto,principal.getName());
+        userService.editUserPassword(passwordChangeDto, principal.getName());
         return "User password changed";
     }
 
@@ -84,5 +103,15 @@ public class UserProfileController {
     public ResponseEntity<Object> addPhotography(Principal principal, @RequestParam("file") MultipartFile file) throws IOException {
         userService.savePhoto(file, principal.getName());
         return new ResponseEntity<>("file uploaded successfully", HttpStatus.OK);
+    }
+
+    @GetMapping(USER_PROJECT_INVITATIONS_ENDPOINT)
+    public ResponseEntity<Set<ProjectInvitationDto>> userProjectInvitations(Principal principal) {
+        return new ResponseEntity<>(projectService.userProjectInvitations(principal.getName()), HttpStatus.FOUND);
+    }
+
+    @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
+    public String leaveProject(Principal principal, @PathVariable Long id) {
+        return projectService.leaveProject(principal.getName(), id);
     }
 }
