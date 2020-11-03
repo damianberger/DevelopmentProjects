@@ -13,9 +13,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername (String username);
 
     boolean existsUserByUsername(String username);
-
-    @Modifying
-    @Transactional
-    @Query(value = "delete from user_projects b where b.project_id= ?1", nativeQuery = true)
-    void removeUsersFromProject(Long id);
 }

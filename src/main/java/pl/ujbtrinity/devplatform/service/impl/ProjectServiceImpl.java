@@ -1,7 +1,5 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
 import pl.ujbtrinity.devplatform.entity.*;
@@ -90,9 +88,19 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProject(Long id) {
-        projectRepository.deleteById(id);
+    public String deleteProject(String username, Long id) {
+        User projectOwner = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(id);
+        if(!project.isPresent()){
+            return "Project doesn't exist";
+        }
+        if(!project.get().getCreator().equals(projectOwner)){
+            return "You are not an owner of this project";
+        }
+        projectRepository.removeUsersFromProject(id);
         projectInvitationRepository.removeProjectInvitationsByProject(id);
+        projectRepository.deleteById(id);
+        return "Project successfully deleted";
     }
 
     @Override
@@ -156,8 +164,4 @@ public class ProjectServiceImpl implements ProjectService {
         return "Invitation pending";
     }
 
-    @Override
-    public void removeUsersFromProject(Long id) {
-        userRepository.removeUsersFromProject(id);
-    }
 }

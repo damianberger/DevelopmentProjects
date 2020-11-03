@@ -14,13 +14,15 @@ public class ProjectInvitation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     private User invitingUser;
 
-    @ManyToOne
+    @Column(nullable = false)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private User invitedUser;
 
-    @ManyToOne
+    @Column(nullable = false)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Project project;
 
     private LocalDateTime created;

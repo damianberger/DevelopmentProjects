@@ -60,20 +60,8 @@ public class ProjectManagementController {
     }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
-    public ResponseEntity<String> deleteProject(@PathVariable Long id, Principal principal) throws InterruptedException {
-        User projectOwner = userService.findByUsername(principal.getName());
-        Optional<Project> project = projectService.findById(id);
-        if(!project.isPresent()){
-            return new ResponseEntity<>("Project doesn't exist",HttpStatus.NO_CONTENT);
-        }else {
-            if (projectOwner.getId().equals(project.get().getCreator().getId())) {
-                projectService.removeUsersFromProject(id);
-                projectService.deleteProject(id);
-                return new ResponseEntity<>("Project deleted", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Access denied", HttpStatus.BAD_REQUEST);
-            }
-        }
+    public String deleteProject(Principal principal, @PathVariable Long id){
+       return projectService.deleteProject(principal.getName(), id);
     }
 
     @PostMapping(PROJECT_UPDATE_ENDPOINT)

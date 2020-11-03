@@ -13,9 +13,8 @@ public interface ProjectService {
     ProjectViewDto viewProject(Long id);
     List<ProjectSearchReceivedDto> projectSearch();
     void updateProject (ProjectUpdateDto projectUpdateDto);
-    void deleteProject (Long id);
+    String deleteProject (String username, Long id);
     String joinProject(String username, Long id);
     String leaveProject(String username, Long id);
     String inviteUser(String username, Long userId, Long projectId);
-    void removeUsersFromProject(Long id);
 }
