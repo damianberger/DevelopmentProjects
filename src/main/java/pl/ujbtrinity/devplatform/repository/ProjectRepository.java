@@ -16,4 +16,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Transactional
     @Query(value = "delete from projects_users b where b.project_id= ?1", nativeQuery = true)
     void removeUsersFromProject(Long id);
+
+
 }

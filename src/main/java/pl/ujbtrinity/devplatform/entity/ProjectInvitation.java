@@ -17,11 +17,9 @@ public class ProjectInvitation {
     @ManyToOne(cascade = CascadeType.DETACH)
     private User invitingUser;
 
-    @Column(nullable = false)
     @ManyToOne(cascade = CascadeType.DETACH)
     private User invitedUser;
 
-    @Column(nullable = false)
     @ManyToOne(cascade = CascadeType.DETACH)
     private Project project;
 

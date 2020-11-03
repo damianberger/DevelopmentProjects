@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ProjectManagementController {
 
@@ -95,5 +94,10 @@ public class ProjectManagementController {
         return projectService.inviteUser(principal.getName(),userId,projectId);
     }
 
+    @GetMapping(PROJECT_PENDING_INVITATIONS_ENDPOINT)
+    public ResponseEntity<Set<ProjectInvitationDto>> pendingProjectInvitations(@PathVariable Long id, Principal principal){
+        Set<ProjectInvitationDto> projectInvitations = projectService.projectInvitations(id,principal.getName());
+        return new ResponseEntity<>(projectInvitations, HttpStatus.FOUND);
+    }
 
 }

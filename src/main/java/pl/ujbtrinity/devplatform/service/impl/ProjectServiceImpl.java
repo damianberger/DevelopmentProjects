@@ -1,5 +1,6 @@
 package pl.ujbtrinity.devplatform.service.impl;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
 import pl.ujbtrinity.devplatform.entity.*;
@@ -151,17 +152,40 @@ public class ProjectServiceImpl implements ProjectService {
         if(!project.isPresent()){
             return "Project by this ID doesn't exist";
         }
-        if(!invitingUser.equals(project.get().getCreator())){
+        if(project.get().getCreator().equals(invitingUser) || project.get().getUsers().contains(invitingUser)){
+            ProjectInvitation invite = new ProjectInvitation();
+            invite.setInvitingUser(invitingUser);
+            invite.setInvitedUser(invitedUser.get());
+            invite.setProject(project.get());
+            invite.setStatus(InvitationStatus.ACTIVE);
+            invite.setCreated(LocalDateTime.now());
+            projectInvitationRepository.save(invite);
+            return "Invitation pending";
+        } else {
             return "You are not an owner of selected project";
         }
-        ProjectInvitation invite = new ProjectInvitation();
-        invite.setInvitingUser(invitingUser);
-        invite.setInvitedUser(invitedUser.get());
-        invite.setProject(project.get());
-        invite.setStatus(InvitationStatus.ACTIVE);
-        invite.setCreated(LocalDateTime.now());
-        projectInvitationRepository.save(invite);
-        return "Invitation pending";
     }
 
+    @Override
+    public Set<ProjectInvitationDto> projectInvitations(Long id, String username) {
+        Optional<Project> project = projectRepository.findById(id);
+        if(!project.isPresent()){
+            return null;
+        }
+        User projectOwner = userRepository.findByUsername(username);
+        if(!project.get().getCreator().equals(projectOwner)){
+            return null;
+        }
+        Set<ProjectInvitation> invitations = projectInvitationRepository.findByProject(id);
+        Set<ProjectInvitationDto> invitationDtos = new HashSet<>();
+        for (ProjectInvitation invitation: invitations) {
+            ProjectInvitationDto invitationDto = new ProjectInvitationDto();
+            invitationDto.setInvitationId(invitation.getId());
+            invitationDto.setInvitationDateTime(invitation.getCreated());
+            invitationDto.setInvitingUser(invitation.getInvitingUser().getUsername());
+            invitationDto.setInvitedUser(invitation.getInvitedUser().getUsername());
+            invitationDtos.add(invitationDto);
+        }
+        return invitationDtos;
+    }
 }

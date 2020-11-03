@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ujbtrinity.devplatform.entity.ProjectInvitation;
 
+import java.util.Set;
+
 @Repository
 public interface ProjectInvitationRepository extends JpaRepository<ProjectInvitation, Long> {
 
@@ -14,5 +16,15 @@ public interface ProjectInvitationRepository extends JpaRepository<ProjectInvita
     @Transactional
     @Query(value = "delete from project_invitation b where b.project_id= ?1", nativeQuery = true)
     void removeProjectInvitationsByProject(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "select * from project_invitation b where b.project_id= ?1", nativeQuery = true)
+    Set<ProjectInvitation> findByProject(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "select * from project_invitation b where b.invited_user_id= ?1", nativeQuery = true)
+    Set<ProjectInvitation> findByUser(Long id);
 
 }
