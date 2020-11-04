@@ -1,17 +1,14 @@
-package pl.ujbtrinity.devplatform.Controller;
+package pl.ujbtrinity.devplatform.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.ujbtrinity.devplatform.dto.projectDto.*;
-import pl.ujbtrinity.devplatform.entity.Project;
-import pl.ujbtrinity.devplatform.entity.User;
 import pl.ujbtrinity.devplatform.service.impl.ProjectServiceImpl;
 import pl.ujbtrinity.devplatform.service.impl.UserServiceImpl;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController

@@ -1,4 +1,4 @@
-package pl.ujbtrinity.devplatform.Controller;
+package pl.ujbtrinity.devplatform.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
