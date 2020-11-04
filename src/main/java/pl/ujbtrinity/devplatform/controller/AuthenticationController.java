@@ -1,4 +1,4 @@
-package pl.ujbtrinity.devplatform.Controller;
+package pl.ujbtrinity.devplatform.controller;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

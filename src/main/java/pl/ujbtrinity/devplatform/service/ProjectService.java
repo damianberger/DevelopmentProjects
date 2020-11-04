@@ -13,7 +13,7 @@ public interface ProjectService {
     void createProject(ProjectCreateDto projectCreateDto, String username);
     ProjectViewDto viewProject(Long id);
     List<ProjectSearchReceivedDto> projectSearch();
-    void updateProject (ProjectUpdateDto projectUpdateDto);
+    String updateProject (ProjectUpdateDto projectUpdateDto, String username);
     String deleteProject (String username, Long id);
     String joinProject(String username, Long id);
     String acceptProjectInvitation(String username, Long id);
