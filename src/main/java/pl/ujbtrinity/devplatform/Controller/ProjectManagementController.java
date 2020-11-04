@@ -36,8 +36,6 @@ public class ProjectManagementController {
     private static final String PROJECT_PENDING_INVITATIONS_ENDPOINT = "/project/invitations/{id}";
 
 
-
-
     @PostMapping(PROJECT_CREATION_ENDPOINT)
     public String createNewProject(@RequestBody ProjectCreateDto projectCreateDto, Principal principal) {
         projectService.createProject(projectCreateDto, principal.getName());
@@ -60,44 +58,33 @@ public class ProjectManagementController {
     }
 
     @DeleteMapping(PROJECT_DELETE_ENDPOINT)
-    public String deleteProject(Principal principal, @PathVariable Long id){
-       return projectService.deleteProject(principal.getName(), id);
+    public String deleteProject(Principal principal, @PathVariable Long id) {
+        return projectService.deleteProject(principal.getName(), id);
     }
 
     @PostMapping(PROJECT_UPDATE_ENDPOINT)
-    public ResponseEntity<String> updateProject(@RequestBody ProjectUpdateDto projectUpdateDto, Principal principal) {
-        User projectOwner = userService.findByUsername(principal.getName());
-        Optional<Project> project = projectService.findById(projectUpdateDto.getId());
-        if(!project.isPresent()){
-            return new ResponseEntity<>("Project doesn't exist",HttpStatus.NO_CONTENT);
-        }else {
-            if (projectOwner.getId().equals(project.get().getCreator().getId())) {
-                projectService.updateProject(projectUpdateDto);
-                return new ResponseEntity<>("Project updated", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Access denied", HttpStatus.BAD_REQUEST);
-            }
-        }
+    public String updateProject(@RequestBody ProjectUpdateDto projectUpdateDto, Principal principal) {
+        return projectService.updateProject(projectUpdateDto, principal.getName());
     }
 
     @GetMapping(PROJECT_JOIN_ENDPOINT)
-     public String joinProject(@PathVariable Long id, Principal principal){
+    public String joinProject(@PathVariable Long id, Principal principal) {
         return projectService.joinProject(principal.getName(), id);
     }
 
     @GetMapping(PROJECT_LEAVE_ENDPOINT)
-    public String leaveProject(@PathVariable Long id, Principal principal){
+    public String leaveProject(@PathVariable Long id, Principal principal) {
         return projectService.leaveProject(principal.getName(), id);
     }
 
     @PostMapping(PROJECT_INVITE_ENDPOINT)
-    public String inviteUser(Principal principal, @PathVariable Long userId, @PathVariable Long projectId){
-        return projectService.inviteUser(principal.getName(),userId,projectId);
+    public String inviteUser(Principal principal, @PathVariable Long userId, @PathVariable Long projectId) {
+        return projectService.inviteUser(principal.getName(), userId, projectId);
     }
 
     @GetMapping(PROJECT_PENDING_INVITATIONS_ENDPOINT)
-    public ResponseEntity<Set<ProjectInvitationDto>> pendingProjectInvitations(@PathVariable Long id, Principal principal){
-        Set<ProjectInvitationDto> projectInvitations = projectService.projectInvitations(id,principal.getName());
+    public ResponseEntity<Set<ProjectInvitationDto>> pendingProjectInvitations(@PathVariable Long id, Principal principal) {
+        Set<ProjectInvitationDto> projectInvitations = projectService.projectInvitations(id, principal.getName());
         return new ResponseEntity<>(projectInvitations, HttpStatus.FOUND);
     }
 

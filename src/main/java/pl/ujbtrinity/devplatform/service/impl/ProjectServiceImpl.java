@@ -68,22 +68,31 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void updateProject(ProjectUpdateDto projectUpdateDto) {
-        Project project = projectRepository.getOne(projectUpdateDto.getId());
-        project.setDescription(projectUpdateDto.getDescription());
+    public String updateProject(ProjectUpdateDto projectUpdateDto, String username) {
+        User user = userRepository.findByUsername(username);
+        Optional<Project> project = projectRepository.findById(projectUpdateDto.getId());
+        if(!project.isPresent()){
+            return "Project doesn't exist";
+        }
+        if(!project.get().getCreator().equals(user)){
+            return "You are not an owner of this project";
+        }
         Set<Technology> projectTechnologies = new HashSet<>();
+        Set<Framework> projectFrameworks = new HashSet<>();
+
         for (String technology : projectUpdateDto.getTechnologiesUsed()) {
             projectTechnologies.add(technologyRepository.findByName(technology));
         }
-        project.setTechnologiesUsed(projectTechnologies);
 
-        Set<Framework> projectFrameworks = new HashSet<>();
         for (String framework : projectUpdateDto.getFrameworksUsed()) {
             projectFrameworks.add(frameworkRepository.findByName(framework));
         }
-        project.setFrameworksUsed(projectFrameworks);
 
-        projectRepository.save(project);
+        project.get().setTechnologiesUsed(projectTechnologies);
+        project.get().setFrameworksUsed(projectFrameworks);
+        project.get().setDescription(projectUpdateDto.getDescription());
+        projectRepository.save(project.get());
+        return "Project successfully updated";
     }
 
     @Override
