@@ -15,11 +15,9 @@ import java.util.Set;
 public class ProjectManagementController {
 
     private final ProjectServiceImpl projectService;
-    private final UserServiceImpl userService;
 
-    public ProjectManagementController(ProjectServiceImpl projectService, UserServiceImpl userService) {
+    public ProjectManagementController(ProjectServiceImpl projectService) {
         this.projectService = projectService;
-        this.userService = userService;
     }
 
     private static final String PROJECT_CREATION_ENDPOINT = "/project/create";
