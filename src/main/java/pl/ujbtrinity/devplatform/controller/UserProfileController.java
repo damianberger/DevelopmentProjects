@@ -27,7 +27,7 @@ public class UserProfileController {
         this.projectService = projectService;
     }
 
-    private static final String USER_PROFILE_ENDPOINT = "/user/profile";
+    private static final String USER_PROFILE_ENDPOINT = "/user/profile/{username}";
     private static final String USER_EMAIL_CHANGE_ENDPOINT = "/user/profile/email/change";
     private static final String USER_PASSWORD_CHANGE_ENDPOINT = "/user/profile/password/change";
     private static final String USER_FRAMEWORKS_EDITION_ENDPOINT = "/user/profile/frameworks/edit";
@@ -41,22 +41,26 @@ public class UserProfileController {
     private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
 
     @GetMapping(USER_PROJECT_INVITATION_ACCEPT_ENDPOINT)
-    public String acceptProjectInvitation(Principal principal,@PathVariable Long id) {
+    public String acceptProjectInvitation(Principal principal, @PathVariable Long id) {
         return projectService.acceptProjectInvitation(principal.getName(), id);
     }
 
 
     @GetMapping(USER_PROJECT_INVITATION_DECLINE_ENDPOINT)
-    public String declineProjectInvitation(Principal principal,@PathVariable Long id) {
+    public String declineProjectInvitation(Principal principal, @PathVariable Long id) {
         return projectService.declineProjectInvitation(principal.getName(), id);
     }
 
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
-    public ResponseEntity<UserProfileDto> readProfile(Principal principal) {
-        UserProfileDto userProfile = userService.getUserProfile(principal.getName());
-        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+    public ResponseEntity<?> readProfile(@PathVariable String username, Principal principal) {
+        if (userService.friendListCheck(username, principal.getName())) {
+            return new ResponseEntity<>(userService.getPrivateUserProfile(username), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(userService.getPublicUserProfile(username), HttpStatus.OK);
+        }
     }
+
 
 
     @GetMapping(value = USER_PROFILE_PHOTOGRAPHY_ENDPOINT)

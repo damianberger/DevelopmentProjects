@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,18 +27,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final ProjectRepository projectRepository;
     private final FrameworkRepository frameworkRepository;
     private final TechnologyRepository technologyRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FriendListRepository friendListRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, ProjectRepository projectRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, FrameworkRepository frameworkRepository, TechnologyRepository technologyRepository, BCryptPasswordEncoder passwordEncoder, FriendListRepository friendListRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.projectRepository = projectRepository;
         this.frameworkRepository = frameworkRepository;
         this.technologyRepository = technologyRepository;
         this.passwordEncoder = passwordEncoder;
+        this.friendListRepository = friendListRepository;
     }
 
     @Override
@@ -48,8 +47,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileDto getUserProfile(String username) {
-        return UserProfileDto.fromUser(findByUsername(username));
+    public boolean friendListCheck(String username, String principalName) {
+        Set<Long> userFriends = friendListRepository.friendsCheck(userRepository.findByUsername(username).getId());
+        Long principalId = userRepository.findByUsername(principalName).getId();
+        return userFriends.contains(principalId) || username.equals(principalName);
+    }
+
+    @Override
+    public PrivateViewUserProfileDto getPrivateUserProfile(String username) {
+        return PrivateViewUserProfileDto.fromUser(findByUsername(username));
+    }
+
+    @Override
+    public PublicViewUserProfileDto getPublicUserProfile(String username) {
+        return PublicViewUserProfileDto.fromUser(findByUsername(username));
     }
 
     @Override

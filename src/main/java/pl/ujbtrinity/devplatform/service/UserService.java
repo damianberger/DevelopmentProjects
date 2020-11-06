@@ -10,7 +10,8 @@ import java.util.List;
 
 public interface UserService {
     User findByUsername (String username);
-    UserProfileDto getUserProfile(String username) throws IOException;
+    PrivateViewUserProfileDto getPrivateUserProfile(String username) throws IOException;
+    PublicViewUserProfileDto getPublicUserProfile(String username) throws IOException;
     byte[] getUserProfilePhoto(Long id) throws IOException;
     void register (UserRegistrationDto userRegistrationDto);
     void setStatus (String userName);
@@ -24,4 +25,5 @@ public interface UserService {
     boolean existsByUsername(String username);
     void createSuperAdmin(User user);
     void savePhoto(MultipartFile file, String username) throws IOException;
+    boolean friendListCheck(String username, String principalName);
 }

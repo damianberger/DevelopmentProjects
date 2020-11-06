@@ -3,6 +3,7 @@ package pl.ujbtrinity.devplatform.entity;
 import lombok.Data;
 import pl.ujbtrinity.devplatform.model.FriendStatus;
 
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,11 +15,9 @@ public class FriendList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
-    private User invitingUser;
+    private Long invitingUser;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
-    private User invitedUser;
+    private Long invitedUser;
 
     private LocalDateTime invited;
 
