@@ -41,7 +41,7 @@ public class UserProfileController {
     private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
     private static final String USER_FRIEND_LIST_ENDPOINT = "/user/friends";
     private static final String USER_FRIEND_REQUEST_ACCEPT_ENDPOINT = "/user/friend/request/accept/{id}";
-    private static final String USER_FRIEND_REQUEST_DECLINE_ENDPOINT = "/user/friend/request/decline/{id}";
+    private static final String USER_FRIEND_REQUEST_REMOVE_ENDPOINT = "/user/friend/request/decline/{username}";
     private static final String USER_FRIEND_REQUESTED_ENDPOINT = "/user/friend/requested";
     private static final String USER_FRIEND_RECEIVED_ENDPOINT = "/user/friend/received";
     private static final String USER_REMOVE_FRIEND_ENDPOINT = "/user/friend/remove/{username}";
@@ -62,16 +62,16 @@ public class UserProfileController {
 //
 //    }
 //
-//    @GetMapping(value = USER_FRIEND_REQUEST_DECLINE_ENDPOINT)
-//    public String friendRequestDenied(Principal principal, @PathVariable Long id) {
-//
-//    }
+    @GetMapping(value = USER_FRIEND_REQUEST_REMOVE_ENDPOINT)
+    public String friendRequestDenied(Principal principal, @PathVariable String username) {
+        return userService.removeFriendRequest(username, principal.getName());
+    }
 //
 //    @GetMapping(value = USER_FRIEND_REQUEST_ACCEPT_ENDPOINT)
 //    public String friendRequestAccepted(Principal principal, @PathVariable Long id) {
 //
 //    }
-//
+
     @GetMapping(value = USER_REMOVE_FRIEND_ENDPOINT)
     public String removeFriend(Principal principal, @PathVariable String username) {
         return userService.removeFriend(username, principal.getName());

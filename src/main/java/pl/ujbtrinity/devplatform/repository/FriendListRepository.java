@@ -30,8 +30,8 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM friend_list where status = 'INVITATION' and id = ?1", nativeQuery = true)
-    void declineOrWithdrawFriendRequest(Long id);
+    @Query(value = "DELETE FROM friend_list where status = 'INVITATION' and invited_user = ?1 and inviting_user = ?2", nativeQuery = true)
+    void removeFriendRequest(Long invitedUserId, Long invitingUserId);
 
 
 

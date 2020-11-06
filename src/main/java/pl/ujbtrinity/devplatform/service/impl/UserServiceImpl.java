@@ -191,7 +191,7 @@ public class UserServiceImpl implements UserService {
     public Set<String> userFriendList(String username) {
         Set<Long> friendsId = friendListRepository.friendsCheck(userRepository.findByUsername(username).getId());
         Set<String> friends = new HashSet<>();
-        for (Long friendId: friendsId) {
+        for (Long friendId : friendsId) {
             friends.add(userRepository.getOne(friendId).getUsername());
         }
         return friends;
@@ -201,14 +201,13 @@ public class UserServiceImpl implements UserService {
     public String removeFriend(String username, String principalName) {
         Long principalId = userRepository.findByUsername(principalName).getId();
         Long targetUserId = userRepository.findByUsername(username).getId();
-        if(friendListCheck(username,principalName)){
+        if (friendListCheck(username, principalName)) {
             friendListRepository.removeFromFriendList(principalId, targetUserId);
             friendListRepository.removeFromFriendList(targetUserId, principalId);
             return "You have removed " + username + " from your friend list";
-        }else{
+        } else {
             return username + " is not withing your friend list";
         }
-
     }
 
     @Override
@@ -227,7 +226,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String declineOrWithdrawFriendRequest(String username, Long id) {
-        return null;
+    public String removeFriendRequest(String username, String principalName) {
+        Long principalId = userRepository.findByUsername(principalName).getId();
+        Long targetUserId = userRepository.findByUsername(username).getId();
+        friendListRepository.removeFriendRequest(targetUserId, principalId);
+        friendListRepository.removeFriendRequest(principalId, targetUserId);
+        return "You have removed friend request with user " + username;
     }
 }

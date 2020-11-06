@@ -32,6 +32,6 @@ public interface UserService {
     Set<FriendListReceived> receivedFriendInvitations(String username);
     Set<FriendListRequested> requestedFriendInvitations(String username);
     String acceptFriendRequest(String username, Long id);
-    String declineOrWithdrawFriendRequest(String username, Long id);
+    String removeFriendRequest(String username, String principalName);
 
 }
