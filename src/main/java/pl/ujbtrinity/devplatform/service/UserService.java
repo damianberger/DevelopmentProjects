@@ -7,6 +7,7 @@ import pl.ujbtrinity.devplatform.entity.User;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     User findByUsername (String username);
@@ -26,4 +27,11 @@ public interface UserService {
     void createSuperAdmin(User user);
     void savePhoto(MultipartFile file, String username) throws IOException;
     boolean friendListCheck(String username, String principalName);
+    Set<String> userFriendList(String username);
+    String removeFriend(String username, String principalName);
+    Set<FriendListReceived> receivedFriendInvitations(String username);
+    Set<FriendListRequested> requestedFriendInvitations(String username);
+    String acceptFriendRequest(String username, Long id);
+    String declineFriendRequest(String username, Long id);
+
 }

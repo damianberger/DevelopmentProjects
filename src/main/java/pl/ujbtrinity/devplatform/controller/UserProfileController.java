@@ -39,18 +39,43 @@ public class UserProfileController {
     private static final String USER_PROJECT_INVITATIONS_ENDPOINT = "/user/project/invitations";
     private static final String USER_PROJECT_INVITATION_ACCEPT_ENDPOINT = "/user/project/accept/{id}";
     private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
+    private static final String USER_FRIEND_LIST_ENDPOINT = "/user/friends";
+    private static final String USER_FRIEND_REQUEST_ACCEPT_ENDPOINT = "/user/friend/request/accept/{id}";
+    private static final String USER_FRIEND_REQUEST_DECLINE_ENDPOINT = "/user/friend/request/decline/{id}";
+    private static final String USER_FRIEND_REQUESTED_ENDPOINT = "/user/friend/requested";
+    private static final String USER_FRIEND_RECEIVED_ENDPOINT = "/user/friend/received";
+    private static final String USER_REMOVE_FRIEND_ENDPOINT = "/user/friend/remove/{username}";
 
-    @GetMapping(USER_PROJECT_INVITATION_ACCEPT_ENDPOINT)
-    public String acceptProjectInvitation(Principal principal, @PathVariable Long id) {
-        return projectService.acceptProjectInvitation(principal.getName(), id);
+
+    @GetMapping(value = USER_FRIEND_LIST_ENDPOINT)
+    public Set<String> myFriendList(Principal principal) {
+        return userService.userFriendList(principal.getName());
     }
 
-
-    @GetMapping(USER_PROJECT_INVITATION_DECLINE_ENDPOINT)
-    public String declineProjectInvitation(Principal principal, @PathVariable Long id) {
-        return projectService.declineProjectInvitation(principal.getName(), id);
-    }
-
+//    @GetMapping(value = USER_FRIEND_REQUESTED_ENDPOINT)
+//    public Set<FriendListRequested> sentFriendRequests(Principal principal) {
+//
+//    }
+//
+//    @GetMapping(value = USER_FRIEND_RECEIVED_ENDPOINT)
+//    public Set<FriendListReceived> receivedFriendRequests(Principal principal) {
+//
+//    }
+//
+//    @GetMapping(value = USER_FRIEND_REQUEST_DECLINE_ENDPOINT)
+//    public String friendRequestDenied(Principal principal, @PathVariable Long id) {
+//
+//    }
+//
+//    @GetMapping(value = USER_FRIEND_REQUEST_ACCEPT_ENDPOINT)
+//    public String friendRequestAccepted(Principal principal, @PathVariable Long id) {
+//
+//    }
+//
+//    @GetMapping(value = USER_REMOVE_FRIEND_ENDPOINT)
+//    public String removeFriend(Principal principal, @PathVariable String username) {
+//
+//    }
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
     public ResponseEntity<?> readProfile(@PathVariable String username, Principal principal) {
@@ -61,8 +86,6 @@ public class UserProfileController {
         }
     }
 
-
-
     @GetMapping(value = USER_PROFILE_PHOTOGRAPHY_ENDPOINT)
     public ResponseEntity<byte[]> getProfilePhoto(@PathVariable Long id) throws IOException {
         return ResponseEntity
@@ -72,32 +95,32 @@ public class UserProfileController {
     }
 
 
-    @PostMapping(USER_EMAIL_CHANGE_ENDPOINT)
+    @PostMapping(value = USER_EMAIL_CHANGE_ENDPOINT)
     public String editUserEmail(Principal principal, @Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
         userService.editUserEmail(userProfileEditDto, principal.getName());
         return "User email changed";
     }
 
-    @PostMapping(USER_PASSWORD_CHANGE_ENDPOINT)
+    @PostMapping(value = USER_PASSWORD_CHANGE_ENDPOINT)
     public String editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
         userService.editUserPassword(passwordChangeDto, principal.getName());
         return "User password changed";
     }
 
 
-    @PostMapping(USER_TECHNOLOGIES_EDITION_ENDPOINT)
+    @PostMapping(value = USER_TECHNOLOGIES_EDITION_ENDPOINT)
     public String addTechnologiesUsedByCurrentUser(Principal principal, @RequestBody UserTechnologyDto userTechnologyDto) {
         userService.editUserTechnologies(userTechnologyDto, principal.getName());
         return "User technologies updated";
     }
 
-    @PostMapping(USER_FRAMEWORKS_EDITION_ENDPOINT)
+    @PostMapping(value = USER_FRAMEWORKS_EDITION_ENDPOINT)
     public String addFrameworksUsedByCurrentUser(Principal principal, @RequestBody UserFrameworkDto userFrameworkDto) {
         userService.editUserFrameworks(userFrameworkDto, principal.getName());
         return "User frameworks updated";
     }
 
-    @PostMapping(USER_PERSONALS_CHANGE_ENDPOINT)
+    @PostMapping(value = USER_PERSONALS_CHANGE_ENDPOINT)
     public String editUserPersonals(Principal principal, @RequestBody UserProfileChangeDto userProfileChangeDto) {
         userService.editUserPersonals(userProfileChangeDto, principal.getName());
         return "User personals updated";
@@ -109,12 +132,23 @@ public class UserProfileController {
         return new ResponseEntity<>("file uploaded successfully", HttpStatus.OK);
     }
 
-    @GetMapping(USER_PROJECT_INVITATIONS_ENDPOINT)
+    @GetMapping(value = USER_PROJECT_INVITATIONS_ENDPOINT)
     public ResponseEntity<Set<ProjectInvitationDto>> userProjectInvitations(Principal principal) {
         return new ResponseEntity<>(projectService.userProjectInvitations(principal.getName()), HttpStatus.FOUND);
     }
 
-    @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
+    @GetMapping(value = USER_PROJECT_INVITATION_ACCEPT_ENDPOINT)
+    public String acceptProjectInvitation(Principal principal, @PathVariable Long id) {
+        return projectService.acceptProjectInvitation(principal.getName(), id);
+    }
+
+
+    @GetMapping(value = USER_PROJECT_INVITATION_DECLINE_ENDPOINT)
+    public String declineProjectInvitation(Principal principal, @PathVariable Long id) {
+        return projectService.declineProjectInvitation(principal.getName(), id);
+    }
+
+    @GetMapping(value = USER_LEAVE_PROJECT_ENDPOINT)
     public String leaveProject(Principal principal, @PathVariable Long id) {
         return projectService.leaveProject(principal.getName(), id);
     }

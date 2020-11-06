@@ -15,6 +15,10 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
             "(SELECT inviting_user FROM friend_list where status = 'FRIEND' and invited_user = ?1)\n", nativeQuery = true)
     Set<Long> friendsCheck(Long id);
 
+    @Query(value = "SELECT invited_user FROM friend_list where status = 'INVITATION' and inviting_user = ?1", nativeQuery = true)
+    Set<Long> sentFriendRequests(Long id);
 
+    @Query(value = "SELECT inviting_user FROM friend_list where status = 'INVITATION' and invited_user = ?1", nativeQuery = true)
+    Set<Long> receivedFriendRequest(Long id);
 
 }

@@ -186,4 +186,39 @@ public class UserServiceImpl implements UserService {
     public boolean existsByUsername(String username) {
         return userRepository.existsUserByUsername(username);
     }
+
+    @Override
+    public Set<String> userFriendList(String username) {
+        Set<Long> friendsId = friendListRepository.friendsCheck(userRepository.findByUsername(username).getId());
+        Set<String> friends = new HashSet<>();
+        for (Long friendId: friendsId) {
+            friends.add(userRepository.getOne(friendId).getUsername());
+        }
+        return friends;
+    }
+
+    @Override
+    public String removeFriend(String username, String principalName) {
+        return null;
+    }
+
+    @Override
+    public Set<FriendListReceived> receivedFriendInvitations(String username) {
+        return null;
+    }
+
+    @Override
+    public Set<FriendListRequested> requestedFriendInvitations(String username) {
+        return null;
+    }
+
+    @Override
+    public String acceptFriendRequest(String username, Long id) {
+        return null;
+    }
+
+    @Override
+    public String declineFriendRequest(String username, Long id) {
+        return null;
+    }
 }
