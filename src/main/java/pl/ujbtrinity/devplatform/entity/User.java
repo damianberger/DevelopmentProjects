@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import pl.ujbtrinity.devplatform.model.Status;
@@ -76,5 +77,4 @@ public class User {
 
     @ManyToMany(mappedBy = "users")
     private Set<Project> projects;
-
 }

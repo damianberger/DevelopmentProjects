@@ -11,8 +11,7 @@ import java.util.stream.Collectors;
 
 
 @Data
-public class UserProfileDto {
-
+public class PrivateViewUserProfileDto {
 
     private String username;
     private String email;
@@ -25,25 +24,25 @@ public class UserProfileDto {
     private Set<String> projects;
     private String photoUrl;
 
-    public static UserProfileDto fromUser(User user) {
-        UserProfileDto userProfileDto = new UserProfileDto();
-        userProfileDto.setEmail(user.getEmail());
-        userProfileDto.setFirstName(user.getFirstName());
-        userProfileDto.setLastName(user.getLastName());
-        userProfileDto.setUsername(user.getUsername());
-        userProfileDto.setDescription(user.getDescription());
-        userProfileDto.setCity(user.getCity());
-        userProfileDto.setFrameworks(user.getFrameworks()
+    public static PrivateViewUserProfileDto fromUser(User user) {
+        PrivateViewUserProfileDto privateUserProfileDto = new PrivateViewUserProfileDto();
+        privateUserProfileDto.setEmail(user.getEmail());
+        privateUserProfileDto.setFirstName(user.getFirstName());
+        privateUserProfileDto.setLastName(user.getLastName());
+        privateUserProfileDto.setUsername(user.getUsername());
+        privateUserProfileDto.setDescription(user.getDescription());
+        privateUserProfileDto.setCity(user.getCity());
+        privateUserProfileDto.setFrameworks(user.getFrameworks()
                 .stream().map(Framework::getName)
                 .collect(Collectors.toSet()));
-        userProfileDto.setTechnologies(user.getTechnologies()
+        privateUserProfileDto.setTechnologies(user.getTechnologies()
                 .stream().map(Technology::getName)
                 .collect(Collectors.toSet()));
-        userProfileDto.setProjects(user.getProjects()
+        privateUserProfileDto.setProjects(user.getProjects()
                 .stream().map(Project::getName)
                 .collect(Collectors.toSet()));
-        userProfileDto.setPhotoUrl("localhost:8081/user/photo/" + user.getId());
-        return userProfileDto;
+        privateUserProfileDto.setPhotoUrl("localhost:8081/user/photo/" + user.getId());
+        return privateUserProfileDto;
     }
 
 
