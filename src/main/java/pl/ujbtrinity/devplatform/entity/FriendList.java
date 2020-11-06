@@ -16,8 +16,10 @@ public class FriendList {
     private Long id;
 
     private Long invitingUser;
+    private String invitingUsername;
 
     private Long invitedUser;
+    private String invitedUsername;
 
     private LocalDateTime invited;
 

@@ -17,11 +17,11 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
             "(SELECT inviting_user FROM friend_list where status = 'FRIEND' and invited_user = ?1)\n", nativeQuery = true)
     Set<Long> friendsCheck(Long id);
 
-    @Query(value = "SELECT invited_user FROM friend_list where status = 'INVITATION' and inviting_user = ?1", nativeQuery = true)
-    Set<Long> sentFriendRequests(Long id);
+    @Query(value = "SELECT * FROM friend_list where status = 'INVITATION' and inviting_user = ?1", nativeQuery = true)
+    Set<FriendList> findByInvitingUser(Long id);
 
-    @Query(value = "SELECT inviting_user FROM friend_list where status = 'INVITATION' and invited_user = ?1", nativeQuery = true)
-    Set<Long> receivedFriendRequest(Long id);
+    @Query(value = "SELECT * FROM friend_list where status = 'INVITATION' and invited_user = ?1", nativeQuery = true)
+    Set<FriendList> findByInvitedUser(Long id);
 
     @Modifying
     @Transactional
@@ -33,6 +33,7 @@ public interface FriendListRepository extends JpaRepository<FriendList, Long> {
     @Query(value = "DELETE FROM friend_list where status = 'INVITATION' and invited_user = ?1 and inviting_user = ?2", nativeQuery = true)
     void removeFriendRequest(Long invitedUserId, Long invitingUserId);
 
-
+    @Query(value = "SELECT * FROM friend_list where status = 'INVITATION' and invited_user = ?1 and inviting_user = ?2", nativeQuery = true)
+    FriendList findFriendRequest(Long invitedUserId, Long invitingUserId);
 
 }

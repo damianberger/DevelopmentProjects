@@ -1,12 +1,13 @@
 package pl.ujbtrinity.devplatform.dto.userDto;
 
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Data
-public class FriendListReceived {
+public class FriendListDto {
 
-    private String invitingUser;
+    private String username;
 
-    private LocalDateTime invited;
+    private LocalDateTime since;
 }

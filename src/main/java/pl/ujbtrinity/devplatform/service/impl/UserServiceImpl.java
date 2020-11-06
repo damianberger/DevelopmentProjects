@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ujbtrinity.devplatform.dto.userDto.*;
 import pl.ujbtrinity.devplatform.entity.*;
+import pl.ujbtrinity.devplatform.model.FriendStatus;
 import pl.ujbtrinity.devplatform.model.Status;
 import pl.ujbtrinity.devplatform.repository.*;
 import pl.ujbtrinity.devplatform.service.UserService;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -212,17 +214,65 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<FriendListReceived> receivedFriendInvitations(String username) {
-        return null;
+        Long userId = userRepository.findByUsername(username).getId();
+        Set<FriendList> friendRequests = friendListRepository.findByInvitedUser(userId);
+        Set<FriendListReceived> friendRequestsDto = new HashSet<>();
+        for (FriendList invitation: friendRequests) {
+            FriendListReceived friendListReceived = new FriendListReceived();
+            friendListReceived.setInvitingUser(invitation.getInvitingUsername());
+            friendListReceived.setInvited(invitation.getInvited());
+            friendRequestsDto.add(friendListReceived);
+        }
+        return friendRequestsDto;
     }
 
     @Override
     public Set<FriendListRequested> requestedFriendInvitations(String username) {
-        return null;
+        Long userId = userRepository.findByUsername(username).getId();
+        Set<FriendList> friendRequests = friendListRepository.findByInvitingUser(userId);
+        Set<FriendListRequested> friendRequestsDto = new HashSet<>();
+        for (FriendList invitation: friendRequests) {
+            FriendListRequested friendListRequested = new FriendListRequested();
+            friendListRequested.setInvitedUser(invitation.getInvitedUsername());
+            friendListRequested.setInvited(invitation.getInvited());
+            friendRequestsDto.add(friendListRequested);
+        }
+        return friendRequestsDto;
     }
 
     @Override
-    public String acceptFriendRequest(String username, Long id) {
-        return null;
+    public String acceptFriendRequest(String username, String principalUsername) {
+        User invited = userRepository.findByUsername(username);
+        if(invited == null){
+            return "User by nickname " + username + " doesn't exist";
+        }
+        User principal = userRepository.findByUsername(principalUsername);
+        FriendList invitation = friendListRepository.findFriendRequest(invited.getId(),principal.getId());
+        if(invitation == null){
+            return username + " didn't send friend request yet";
+        }
+        invitation.setStatus(FriendStatus.FRIEND);
+        invitation.setAccepted(LocalDateTime.now());
+        friendListRepository.save(invitation);
+        return "You are now friends with " + username;
+    }
+
+    @Override
+    public String inviteFriend(String username, String principalUsername) {
+        User invited = userRepository.findByUsername(username);
+        if(invited == null){
+            return "User by nickname " + username + " doesn't exist";
+        }
+        User principal = userRepository.findByUsername(principalUsername);
+        FriendList friendList = new FriendList();
+        friendList.setInvited(LocalDateTime.now());
+        friendList.setInvitedUser(invited.getId());
+        friendList.setInvitingUser(principal.getId());
+        friendList.setInvitedUsername(invited.getUsername());
+        friendList.setInvitingUsername(principal.getUsername());
+        friendList.setStatus(FriendStatus.INVITATION);
+        friendListRepository.save(friendList);
+        return "Invitation sent";
     }
 
     @Override

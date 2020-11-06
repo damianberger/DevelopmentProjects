@@ -27,11 +27,12 @@ public interface UserService {
     void createSuperAdmin(User user);
     void savePhoto(MultipartFile file, String username) throws IOException;
     boolean friendListCheck(String username, String principalName);
-    Set<String> userFriendList(String username);
     String removeFriend(String username, String principalName);
     Set<FriendListReceived> receivedFriendInvitations(String username);
     Set<FriendListRequested> requestedFriendInvitations(String username);
-    String acceptFriendRequest(String username, Long id);
+    String inviteFriend(String username, String principalUsername);
+    String acceptFriendRequest(String username, String principalUsername);
     String removeFriendRequest(String username, String principalName);
+    Set<String> userFriendList(String username);
 
 }
