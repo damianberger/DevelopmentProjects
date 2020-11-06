@@ -72,10 +72,10 @@ public class UserProfileController {
 //
 //    }
 //
-//    @GetMapping(value = USER_REMOVE_FRIEND_ENDPOINT)
-//    public String removeFriend(Principal principal, @PathVariable String username) {
-//
-//    }
+    @GetMapping(value = USER_REMOVE_FRIEND_ENDPOINT)
+    public String removeFriend(Principal principal, @PathVariable String username) {
+        return userService.removeFriend(username, principal.getName());
+    }
 
     @GetMapping(value = USER_PROFILE_ENDPOINT)
     public ResponseEntity<?> readProfile(@PathVariable String username, Principal principal) {

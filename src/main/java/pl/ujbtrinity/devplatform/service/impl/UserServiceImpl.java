@@ -199,7 +199,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String removeFriend(String username, String principalName) {
-        return null;
+        Long principalId = userRepository.findByUsername(principalName).getId();
+        Long targetUserId = userRepository.findByUsername(username).getId();
+        if(friendListCheck(username,principalName)){
+            friendListRepository.removeFromFriendList(principalId, targetUserId);
+            friendListRepository.removeFromFriendList(targetUserId, principalId);
+            return "You have removed " + username + " from your friend list";
+        }else{
+            return username + " is not withing your friend list";
+        }
+
     }
 
     @Override
@@ -218,7 +227,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String declineFriendRequest(String username, Long id) {
+    public String declineOrWithdrawFriendRequest(String username, Long id) {
         return null;
     }
 }
