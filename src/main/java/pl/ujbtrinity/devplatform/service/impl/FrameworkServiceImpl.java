@@ -10,36 +10,41 @@ import java.util.List;
 @Service
 public class FrameworkServiceImpl implements FrameworkService {
 
-    private final FrameworkRepository FrameworkRepository;
+    private final FrameworkRepository frameworkRepository;
 
     public FrameworkServiceImpl(FrameworkRepository FrameworkRepository) {
-        this.FrameworkRepository = FrameworkRepository;
+        this.frameworkRepository = FrameworkRepository;
     }
 
     @Override
     public void createFramework(Framework Framework) {
-        FrameworkRepository.save(Framework);
+        frameworkRepository.save(Framework);
     }
 
     @Override
     public void updateFramework(Framework Framework) {
-        Framework frFromDB = FrameworkRepository.getOne(Framework.getId());
+        Framework frFromDB = frameworkRepository.getOne(Framework.getId());
         frFromDB.setName(Framework.getName());
-        FrameworkRepository.save(frFromDB);
+        frameworkRepository.save(frFromDB);
     }
 
     @Override
     public List<Framework> findAll() {
-        return FrameworkRepository.findAll();
+        return frameworkRepository.findAll();
     }
 
     @Override
     public Framework readFramework(long id) {
-        return FrameworkRepository.getOne(id);
+        return frameworkRepository.getOne(id);
     }
 
     @Override
     public boolean existsByName(String name) {
-        return FrameworkRepository.existsFrameworkByName(name);
+        return frameworkRepository.existsFrameworkByName(name);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        frameworkRepository.deleteById(id);
     }
 }

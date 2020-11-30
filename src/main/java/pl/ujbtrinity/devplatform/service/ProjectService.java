@@ -22,4 +22,6 @@ public interface ProjectService {
     String inviteUser(String username, Long userId, Long projectId);
     Set<ProjectInvitationDto> projectInvitations(Long id, String username);
     Set<ProjectInvitationDto> userProjectInvitations(String username);
+    List<Project> findAll();
+    void deleteById(Long id);
 }

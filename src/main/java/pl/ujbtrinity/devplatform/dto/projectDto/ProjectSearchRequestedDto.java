@@ -15,6 +15,4 @@ public class ProjectSearchRequestedDto {
     private Set<String> frameworks;
     private Set<String> technologies;
 
-
-
 }
