@@ -10,4 +10,5 @@ public interface FrameworkService {
     List<Framework> findAll();
     Framework readFramework(long id);
     boolean existsByName(String name);
+    void deleteById (Long id);
 }

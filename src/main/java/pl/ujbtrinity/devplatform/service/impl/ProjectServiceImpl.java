@@ -196,6 +196,16 @@ public class ProjectServiceImpl implements ProjectService {
         return getProjectInvitationDtos(invitations);
     }
 
+    @Override
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        projectRepository.deleteById(id);
+    }
+
     private Set<ProjectInvitationDto> getProjectInvitationDtos(Set<ProjectInvitation> invitations) {
         Set<ProjectInvitationDto> invitationDtos = new HashSet<>();
         for (ProjectInvitation invitation : invitations) {

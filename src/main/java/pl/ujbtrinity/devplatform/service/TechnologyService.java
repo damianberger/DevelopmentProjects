@@ -10,4 +10,5 @@ public interface TechnologyService {
     List<Technology> findAll();
     Technology readTechnology(long id);
     boolean existsByName(String name);
+    void deleteById (Long id);
 }

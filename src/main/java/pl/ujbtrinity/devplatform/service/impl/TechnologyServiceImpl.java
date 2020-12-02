@@ -42,4 +42,9 @@ public class TechnologyServiceImpl implements TechnologyService {
     public boolean existsByName(String name) {
         return technologyRepository.existsTechnologyByName(name);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        technologyRepository.deleteById(id);
+    }
 }

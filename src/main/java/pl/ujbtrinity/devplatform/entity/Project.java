@@ -46,5 +46,4 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "framework_id"))
     private Set<Framework> frameworksUsed;
 
-
 }
