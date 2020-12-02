@@ -1,6 +1,5 @@
 package pl.ujbtrinity.devplatform.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import pl.ujbtrinity.devplatform.model.Status;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 

@@ -44,8 +44,7 @@ public class UserRegistrationDto {
     user.setEmail(email);
     user.setFirstName(firstName);
     user.setLastName(lastName);
-    user.setLastName(description);
-    user.setLastName(city);
+    user.setDescription(description);
     user.setPassword(password);
     return user;
     }
