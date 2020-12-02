@@ -11,6 +11,7 @@ import java.util.List;
 public interface UserService {
     User findByUsername (String username);
     UserProfileDto getUserProfile(String username) throws IOException;
+    UserLoginCredentialsDto getUserCredentials(String username);
     byte[] getUserProfilePhoto(Long id) throws IOException;
     void register (UserRegistrationDto userRegistrationDto);
     void setStatus (String userName);

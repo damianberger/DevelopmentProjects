@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserLoginCredentialsDto getUserCredentials(String username) {
+        return UserLoginCredentialsDto.fromUser(findByUsername(username));
+    }
+
+    @Override
     public byte[] getUserProfilePhoto(Long id) throws IOException {
         Optional<User> user = userRepository.findById(id);
         Path path = Paths.get(finalPath + id + ".png");
