@@ -23,7 +23,7 @@ public class ProjectSearchReceivedDto {
         ProjectSearchReceivedDto projectReceived = new ProjectSearchReceivedDto();
         projectReceived.setName(project.getName());
         projectReceived.setCreated(project.getCreated());
-        projectReceived.setViewAddressRedirect("/project/view/" + project.getId());
+        projectReceived.setViewAddressRedirect("/project/" + project.getId());
         projectReceived.setFrameworks(project.getFrameworksUsed()
                 .stream().map(Framework::getName)
                 .collect(Collectors.toSet()));
