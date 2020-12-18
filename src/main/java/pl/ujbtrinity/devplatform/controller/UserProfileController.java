@@ -41,14 +41,16 @@ public class UserProfileController {
     private static final String USER_PROJECT_INVITATION_DECLINE_ENDPOINT = "/user/project/decline/{id}";
 
     @GetMapping(USER_PROJECT_INVITATION_ACCEPT_ENDPOINT)
-    public String acceptProjectInvitation(Principal principal,@PathVariable Long id) {
-        return projectService.acceptProjectInvitation(principal.getName(), id);
+    public ResponseEntity<String> acceptProjectInvitation(Principal principal,@PathVariable Long id) {
+        projectService.acceptProjectInvitation(principal.getName(), id);
+        return new ResponseEntity<>("Project invitation accepted.", HttpStatus.OK);
     }
 
 
     @GetMapping(USER_PROJECT_INVITATION_DECLINE_ENDPOINT)
-    public String declineProjectInvitation(Principal principal,@PathVariable Long id) {
-        return projectService.declineProjectInvitation(principal.getName(), id);
+    public ResponseEntity<String> declineProjectInvitation(Principal principal,@PathVariable Long id) {
+        projectService.declineProjectInvitation(principal.getName(), id);
+        return new ResponseEntity<>("You have declined project invitation.", HttpStatus.OK);
     }
 
 
@@ -69,34 +71,34 @@ public class UserProfileController {
 
 
     @PostMapping(USER_EMAIL_CHANGE_ENDPOINT)
-    public String editUserEmail(Principal principal, @Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
+    public ResponseEntity<String> editUserEmail(Principal principal, @Valid @RequestBody UserEmailChangeDto userProfileEditDto) {
         userService.editUserEmail(userProfileEditDto, principal.getName());
-        return "User email changed";
+        return new ResponseEntity<>("You have changed your email.", HttpStatus.OK);
     }
 
     @PostMapping(USER_PASSWORD_CHANGE_ENDPOINT)
-    public String editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
+    public ResponseEntity<String> editUserPassword(Principal principal, @RequestBody PasswordChangeDto passwordChangeDto) {
         userService.editUserPassword(passwordChangeDto, principal.getName());
-        return "User password changed";
+        return new ResponseEntity<>("You have changed your password.", HttpStatus.OK);
     }
 
 
     @PostMapping(USER_TECHNOLOGIES_EDITION_ENDPOINT)
-    public String addTechnologiesUsedByCurrentUser(Principal principal, @RequestBody UserTechnologyDto userTechnologyDto) {
+    public ResponseEntity<String> addTechnologiesUsedByCurrentUser(Principal principal, @RequestBody UserTechnologyDto userTechnologyDto) {
         userService.editUserTechnologies(userTechnologyDto, principal.getName());
-        return "User technologies updated";
+        return new ResponseEntity<>("You have changed your profile technologies used.", HttpStatus.OK);
     }
 
     @PostMapping(USER_FRAMEWORKS_EDITION_ENDPOINT)
-    public String addFrameworksUsedByCurrentUser(Principal principal, @RequestBody UserFrameworkDto userFrameworkDto) {
+    public ResponseEntity<String> addFrameworksUsedByCurrentUser(Principal principal, @RequestBody UserFrameworkDto userFrameworkDto) {
         userService.editUserFrameworks(userFrameworkDto, principal.getName());
-        return "User frameworks updated";
+        return new ResponseEntity<>("You have changed your profile frameworks used.", HttpStatus.OK);
     }
 
     @PostMapping(USER_PERSONALS_CHANGE_ENDPOINT)
-    public String editUserPersonals(Principal principal, @RequestBody UserProfileChangeDto userProfileChangeDto) {
+    public ResponseEntity<String> editUserPersonals(Principal principal, @RequestBody UserProfileChangeDto userProfileChangeDto) {
         userService.editUserPersonals(userProfileChangeDto, principal.getName());
-        return "User personals updated";
+        return new ResponseEntity<>("You have changed your personal data.", HttpStatus.OK);
     }
 
     @PostMapping(value = USER_UPLOAD_PHOTOGRAPHY_ENDPOINT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -111,7 +113,9 @@ public class UserProfileController {
     }
 
     @GetMapping(USER_LEAVE_PROJECT_ENDPOINT)
-    public String leaveProject(Principal principal, @PathVariable Long id) {
-        return projectService.leaveProject(principal.getName(), id);
+    public ResponseEntity<String> leaveProject(Principal principal, @PathVariable Long id) {
+        projectService.leaveProject(principal.getName(), id);
+        return new ResponseEntity<>("You have left project.", HttpStatus.OK);
     }
 }
+

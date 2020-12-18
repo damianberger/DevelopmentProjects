@@ -72,12 +72,6 @@ public class ProjectManagementController {
         return new ResponseEntity<>("You are in this project now.", HttpStatus.OK);
     }
 
-    @GetMapping(PROJECT_LEAVE_ENDPOINT)
-    public ResponseEntity<String> leaveProject(@PathVariable Long id, Principal principal) {
-        projectService.leaveProject(principal.getName(), id);
-        return new ResponseEntity<>("You have left this project", HttpStatus.OK);
-    }
-
     @PostMapping(PROJECT_INVITE_ENDPOINT)
     public ResponseEntity<String> inviteUser(Principal principal, @PathVariable Long userId, @PathVariable Long projectId) {
         return new ResponseEntity<>(projectService.inviteUser(principal.getName(), userId, projectId), HttpStatus.OK);
