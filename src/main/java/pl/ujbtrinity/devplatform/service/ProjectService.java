@@ -12,7 +12,7 @@ public interface ProjectService {
     Optional<Project> findById(Long id);
     void createProject(ProjectCreateDto projectCreateDto, String username);
     ProjectViewDto viewProject(Long id);
-    List<ProjectSearchReceivedDto> projectSearch();
+    List<String> projectSearch(String name);
     String updateProject (ProjectUpdateDto projectUpdateDto, String username);
     String deleteProject (String username, Long id);
     String joinProject(String username, Long id);

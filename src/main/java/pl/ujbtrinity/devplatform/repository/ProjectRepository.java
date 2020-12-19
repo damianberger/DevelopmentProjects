@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ujbtrinity.devplatform.entity.Project;
 
+import java.util.List;
+
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -17,5 +19,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query(value = "delete from projects_users b where b.project_id= ?1", nativeQuery = true)
     void removeUsersFromProject(Long id);
 
+
+    @Query(value = "SELECT * from projects p where lower(p.name) Like lower(CONCAT('%',:name,'%'))",nativeQuery = true)
+    List<Project> searchProjects(String name);
 
 }

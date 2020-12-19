@@ -52,14 +52,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectSearchReceivedDto> projectSearch() {
-        List<Project> projects = projectRepository.findAll();
-        List<ProjectSearchReceivedDto> projectsFound = new ArrayList<>();
-        for (Project project : projects) {
-            ProjectSearchReceivedDto projectReceived = ProjectSearchReceivedDto.fromProject(project);
-            projectsFound.add(projectReceived);
+    public List<String> projectSearch(String name) {
+        List<Project> projects = projectRepository.searchProjects(name);
+        List<String> projectNames = new ArrayList<>();
+        for (Project project: projects) {
+            projectNames.add(project.getName());
         }
-        return projectsFound;
+        return projectNames;
     }
 
     @Override
