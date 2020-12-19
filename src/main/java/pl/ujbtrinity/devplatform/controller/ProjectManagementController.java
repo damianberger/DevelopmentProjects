@@ -22,12 +22,10 @@ public class ProjectManagementController {
 
     private static final String PROJECT_CREATION_ENDPOINT = "/api/project/create";
     private static final String PROJECT_VIEW_ENDPOINT = "/api/project/view/{id}";
-    private static final String PROJECT_SEARCH_ENDPOINT = "/api/project/all";
+    private static final String PROJECT_SEARCH_ENDPOINT = "/api/project/search";
     private static final String PROJECT_DELETE_ENDPOINT = "/api/project/delete/{id}";
     private static final String PROJECT_UPDATE_ENDPOINT = "/api/project/update";
-
     private static final String PROJECT_JOIN_ENDPOINT = "/api/project/join/{id}";
-    private static final String PROJECT_LEAVE_ENDPOINT = "/api/project/leave/{id}";
     private static final String PROJECT_INVITE_ENDPOINT = "/api/project/invite/user={userId}&project={projectId}";
     private static final String PROJECT_PENDING_INVITATIONS_ENDPOINT = "/api/project/invitations/{id}";
 
@@ -48,8 +46,8 @@ public class ProjectManagementController {
     }
 
     @GetMapping(PROJECT_SEARCH_ENDPOINT)
-    public ResponseEntity<List<ProjectSearchReceivedDto>> searchProjects() {
-        List<ProjectSearchReceivedDto> projectFound = projectService.projectSearch();
+    public ResponseEntity<List<String>> searchProjects(@RequestParam String name) {
+        List<String> projectFound = projectService.projectSearch(name);
         return new ResponseEntity<>(projectFound, HttpStatus.OK);
     }
 
